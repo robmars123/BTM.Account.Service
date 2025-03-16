@@ -1,4 +1,7 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
+
 namespace BTM.Account.Api;
 
 public class Program
@@ -14,6 +17,23 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //option 1
+        .AddJwtBearer(options =>
+        {
+            options.Authority = "https://localhost:5001"; // url of IDP
+            options.Audience = "AccountAPI"; // this is the client id of the API
+            options.TokenValidationParameters = new()
+            {
+                NameClaimType = "name",
+                RoleClaimType = "role",
+                ValidTypes = new[] { "at+jwt" }
+            };
+        });
+
+        builder.Services.AddAuthorization();
+
         var app = builder.Build();
 
         app.MapDefaultEndpoints();
@@ -26,6 +46,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
 

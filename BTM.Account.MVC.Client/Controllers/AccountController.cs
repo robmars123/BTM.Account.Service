@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BTM.Account.MVC.Client.ViewModels;
+using BTM.Account.MVC.Client.Models;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
@@ -16,53 +18,55 @@ namespace BTM.Account.MVC.Client.Controllers
                 throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
-       // [Authorize(Roles = GlobalConstants.Roles.Registered)]
-        public IActionResult UserAccount()
+        [HttpGet]
+        public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var httpClient = _httpClientFactory.CreateClient("AccountAPI");
+
+                var request = new HttpRequestMessage(
+                    HttpMethod.Get,
+                    "/api/users/");
+
+                var response = await httpClient.SendAsync(
+                    request, HttpCompletionOption.ResponseHeadersRead);
+
+                if(!response.IsSuccessStatusCode)
+                {
+                    var result = Result.FailureResult("An error occurred while communicating with the API. Please try again later.");
+                    // Optionally, you can add the result's message to ModelState for displaying on the registration page.
+                    ModelState.AddModelError(string.Empty, result.Message);
+                    return View(model);  // Return to the registration page with the error message.
+                }
+
+                // Redirect to a success page or login page
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> Login()
+        {
+            // Optionally, clear the local session (cookie) first
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Redirect to Duende Identity Server login page via OpenID Connect flow
+            return Challenge(new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         [Authorize]
         public async Task Logout()
         {
-            //var client = _httpClientFactory.CreateClient("IDPClient");
-
-            //var discoveryDocumentResponse = await client
-            //    .GetDiscoveryDocumentAsync();
-            //if (discoveryDocumentResponse.IsError)
-            //{
-            //    throw new Exception(discoveryDocumentResponse.Error);
-            //}
-
-            //var accessTokenRevocationResponse = await client
-            //    .RevokeTokenAsync(new()
-            //    {
-            //        Address = discoveryDocumentResponse.RevocationEndpoint,
-            //        ClientId = "AccountService.WebClient",
-            //        ClientSecret = "mysecret",
-            //        Token = await HttpContext.GetTokenAsync(
-            //            OpenIdConnectParameterNames.AccessToken)
-            //    });
-
-            //if (accessTokenRevocationResponse.IsError)
-            //{
-            //    throw new Exception(accessTokenRevocationResponse.Error);
-            //}
-
-            //var refreshTokenRevocationResponse = await client
-            //    .RevokeTokenAsync(new()
-            //    {
-            //        Address = discoveryDocumentResponse.RevocationEndpoint,
-            //        ClientId = "AccountService.WebClient",
-            //        ClientSecret = "mysecret",
-            //        Token = await HttpContext.GetTokenAsync(
-            //        OpenIdConnectParameterNames.RefreshToken)
-            //    });
-
-            //if (refreshTokenRevocationResponse.IsError)
-            //{
-            //    throw new Exception(accessTokenRevocationResponse.Error);
-            //}
 
             // Clears the  local cookie
             await HttpContext.SignOutAsync(

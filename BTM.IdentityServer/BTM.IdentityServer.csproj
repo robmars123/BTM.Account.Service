@@ -7,13 +7,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Data\**" />
+	  <Content Remove="Data\**" />
+	  <EmbeddedResource Remove="Data\**" />
+	  <None Remove="Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Duende.IdentityModel" Version="7.0.0" />
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.4" />
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Data\" />
 	</ItemGroup>
 </Project>

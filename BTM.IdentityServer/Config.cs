@@ -12,12 +12,27 @@ public static class Config
             new IdentityResources.Profile(),
         };
 
+    public static IEnumerable<ApiResource> ApiResources =>
+ new ApiResource[]
+     {
+             new ApiResource("AccountAPI",
+                 "BTM Account API",
+                 new [] { "role" })
+             {
+                 Scopes = { "AccountApi.fullaccess",
+                     "AccountAPI.read",
+                     "AccountAPI.write"},
+                ApiSecrets = { new Secret("apisecret".Sha256()) }
+             }
+     };
+
     public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[]
+    new ApiScope[]
         {
-            new ApiScope("scope1"),
-            new ApiScope("scope2"),
-        };
+                //clients should match these scopes
+                new ApiScope("AccountAPI.fullaccess"),
+                new ApiScope("AccountAPI.read"),
+                new ApiScope("AccountAPI.write")};
 
     public static IEnumerable<Client> Clients =>
         new Client[]
@@ -44,9 +59,9 @@ public static class Config
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "roles",
-                        "btmaccountapi.fullaccess",//clients should match these scopes
-                        "btmaccountapi.read",//clients should match these scopes
-                        "btmaccountapi.write",//clients should match these scopes
+                        "AccountAPI.fullaccess",//clients should match these scopes
+                        "AccountAPI.read",//clients should match these scopes
+                        "AccountAPI.write",//clients should match these scopes
                     },
                     ClientSecrets =
                     {

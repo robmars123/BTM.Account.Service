@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.Net.Http.Headers;
 
 namespace BTM.Account.MVC.Client;
 
@@ -17,6 +18,16 @@ public class Program
                     .AddJsonOptions(configure => configure.JsonSerializerOptions.PropertyNamingPolicy = null);
 
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+        // create an HttpClient used for accessing the API
+        builder.Services.AddHttpClient("AccountAPI", client =>
+        {
+            client.BaseAddress = new Uri(builder.Configuration["AccountAPI"]);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+        });
+        builder.Services.AddOpenIdConnectAccessTokenManagement();
+
 
         builder.Services.AddHttpClient("IDPClient", client =>
         {

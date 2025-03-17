@@ -17,8 +17,17 @@ All projects utilized ASPNET Core .Net 9
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# TO DO
+These items will be implemented
+1. Middleware: How to write custom middleware and what role it plays in the request pipeline.
+2. Versioning: How to version your APIs to avoid breaking changes.
+3. Security: How to secure your APIs using JSON Web Tokens (JWT) and OpenID Connect as well as how to use role, claims and policy-based authorization.
+4.Structured Logging: How to use structured logging consistently to make it easier to search and analyze logs.
+5. Health Checks: How to implement health checks to monitor the health of your application and its dependencies.
+6. Caching: How to use in-memory and distributed caching to improve the performance of your application.
+7. Documentation: How to use Swagger and OpenAPI to document your APIs.
+8. Background Services: How to use hosted services to execute long-running tasks in your application.
+9. SignalR: How to use SignalR to enable server-side code to push content to clients instantly.
 
 If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
 - [ASP.NET Core](https://github.com/aspnet/Home)

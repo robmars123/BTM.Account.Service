@@ -19,12 +19,12 @@ TODO: Describe and show how to build your code and run the tests.
 
 # TO DO
 These items will be implemented
-1. Middleware: How to write custom middleware and what role it plays in the request pipeline.
-2. Versioning: How to version your APIs to avoid breaking changes.
-3. Security: How to secure your APIs using JSON Web Tokens (JWT) and OpenID Connect as well as how to use role, claims and policy-based authorization.
-4.Structured Logging: How to use structured logging consistently to make it easier to search and analyze logs.
-5. Health Checks: How to implement health checks to monitor the health of your application and its dependencies.
-6. Caching: How to use in-memory and distributed caching to improve the performance of your application.
-7. Documentation: How to use Swagger and OpenAPI to document your APIs.
-8. Background Services: How to use hosted services to execute long-running tasks in your application.
-9. SignalR: How to use SignalR to enable server-side code to push content to clients instantly.
+1. **Middleware**: How to write custom middleware and what role it plays in the request pipeline.
+2. **Versioning**: How to version your APIs to avoid breaking changes.
+3. **Security**: How to secure your APIs using JSON Web Tokens (JWT) and OpenID Connect as well as how to use role, claims and policy-based authorization.
+4. **Structured Logging**: How to use structured logging consistently to make it easier to search and analyze logs.
+5. **Health Checks**: How to implement health checks to monitor the health of your application and its dependencies.
+6. **Caching**: How to use in-memory and distributed caching to improve the performance of your application.
+7. **Documentation**: How to use Swagger and OpenAPI to document your APIs.
+8. **Background Services**: How to use hosted services to execute long-running tasks in your application.
+9. **SignalR**: How to use SignalR to enable server-side code to push content to clients instantly.

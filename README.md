@@ -1,11 +1,15 @@
 [![Build Status](https://dev.azure.com/robmars2008/BTM%20Organization/_apis/build/status%2Frobmars123.DDDCleanArchi.OpenID-OAuth2-Microservice1?branchName=master)](https://dev.azure.com/robmars2008/BTM%20Organization/_build/latest?definitionId=5&branchName=master)
 
 # Introduction 
+The purpose of this solution is to encapsulate the Account domain microservice.
+
 This project demonstrates the following:
 1. The implementation of Authentication/Authorization using OpenIdConnect (OIDC) and OAuth2.0
 2. Domain Driven Design using Clean Architecture
 3. SOLID principles, DRY, Design Patterns: Dependency Injection, Factory Pattern, Result Pattern, MediatR, CQRS (Command Query Responsibility Segregation) and Repository Pattern.
 4. Azure Pipelines integrations.
+5. EntityFramework Core (ORM)
+6. SQL Server
 
 # Solution Structure
 All projects utilized ASPNET Core .Net 9

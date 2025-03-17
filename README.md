@@ -28,8 +28,3 @@ These items will be implemented
 7. Documentation: How to use Swagger and OpenAPI to document your APIs.
 8. Background Services: How to use hosted services to execute long-running tasks in your application.
 9. SignalR: How to use SignalR to enable server-side code to push content to clients instantly.
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)

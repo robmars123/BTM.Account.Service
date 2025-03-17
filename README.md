@@ -7,12 +7,12 @@ This project demonstrates the following:
 3. SOLID principles, DRY, Design Patterns: Dependency Injection, Factory Pattern, Result Pattern, MediatR, CQRS (Command Query Responsibility Segregation) and Repository Pattern.
 4. Azure Pipelines integrations.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Solution Structure
+All projects utilized ASPNET Core .Net 9
+1.	Web Api
+2.	MVC Core 9.0
+3.	Layers: Domain, Application, Infrastruture, Test 
+5.	Duende Identity Server
 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 

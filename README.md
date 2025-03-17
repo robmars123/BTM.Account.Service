@@ -1,7 +1,11 @@
 [![Build Status](https://dev.azure.com/robmars2008/BTM%20Organization/_apis/build/status%2Frobmars123.DDDCleanArchi.OpenID-OAuth2-Microservice1?branchName=master)](https://dev.azure.com/robmars2008/BTM%20Organization/_build/latest?definitionId=5&branchName=master)
 
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+This project demonstrates the following:
+1. The implementation of Authentication/Authorization using OpenIdConnect (OIDC) and OAuth2.0
+2. Domain Driven Design using Clean Architecture
+3. SOLID principles, DRY, Design Patterns: Dependency Injection, Factory Pattern, Result Pattern, MediatR, CQRS (Command Query Responsibility Segregation) and Repository Pattern.
+4. Azure Pipelines integrations.
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:

@@ -44,14 +44,14 @@ public class Index : PageModel
         else
         {
             var context = await _interaction.GetLogoutContextAsync(LogoutId);
-            if (context?.ShowSignoutPrompt == false)
+            if (context?.ShowSignoutPrompt is false)
             {
                 // it's safe to automatically sign-out
                 showLogoutPrompt = false;
             }
         }
             
-        if (showLogoutPrompt == false)
+        if (showLogoutPrompt)
         {
             // if the request for logout was properly authenticated from IdentityServer, then
             // we don't need to show the prompt and can just log the user out directly.

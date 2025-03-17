@@ -25,7 +25,6 @@ try
     if (args.Contains("/seed"))
     {
         Log.Information("Seeding database...");
-        //SeedData.EnsureSeedData(app);
         Log.Information("Done seeding database. Exiting.");
         return;
     }

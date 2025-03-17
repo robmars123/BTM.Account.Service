@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BTM.Account.MVC.Client.ViewModels;
 using BTM.Account.MVC.Client.Models;
+using System.Text;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
@@ -30,19 +33,53 @@ namespace BTM.Account.MVC.Client.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.Password != model.ConfirmPassword)
+                {
+                    // This check is redundant due to the [Compare] attribute
+                    ModelState.AddModelError(string.Empty, "Passwords do not match.");
+                    return View(model);
+                }
+
+                UserRequestModel request = new UserRequestModel
+                {
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Password = model.Password
+                };
+
                 var httpClient = _httpClientFactory.CreateClient("AccountAPI");
 
-                var request = new HttpRequestMessage(
-                    HttpMethod.Get,
-                    "/api/users/");
+                // Serialize the model to JSON to send in the request body
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(request),
+                    Encoding.UTF8,
+                    "application/json"  // Specify that the content type is JSON
+                );
 
-                var response = await httpClient.SendAsync(
-                    request, HttpCompletionOption.ResponseHeadersRead);
-
-                if(!response.IsSuccessStatusCode)
+                var httpRequest = new HttpRequestMessage(
+                    HttpMethod.Post,
+                    "/api/users/") // Ensure this matches the correct API endpoint for user registration
                 {
-                    var result = Result.FailureResult("An error occurred while communicating with the API. Please try again later.");
-                    // Optionally, you can add the result's message to ModelState for displaying on the registration page.
+                    Content = jsonContent  // Add the serialized model as content to the request
+                };
+
+                var response = await httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var responseJson = await response.Content.ReadAsStringAsync();
+
+                    var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseJson);
+
+                    // You can access the specific error details
+                    var errorCode = errorResponse?.code;
+                    var errorMessage = errorResponse?.name ?? "Unknown error";
+
+                    // Optionally, log the error or display it in a user-friendly way
+                    var result = Result.FailureResult(errorMessage);
+
+                    // Add the error message to ModelState for displaying in the registration view
                     ModelState.AddModelError(string.Empty, result.Message);
                     return View(model);  // Return to the registration page with the error message.
                 }

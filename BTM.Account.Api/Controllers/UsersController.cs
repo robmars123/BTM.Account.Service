@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BTM.Account.Api.Models;
+using BTM.Account.Application.Users.RegisterUser;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +11,12 @@ namespace BTM.Account.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public UsersController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -15,17 +24,39 @@ namespace BTM.Account.Api.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            return "value";
+            //var user = await _userService.GetUserByIdAsync(id);
+
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return Ok(_mapper.Map<UserDTO>(user));
+
+            return Ok();
         }
 
         // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody] RegisterUserRequest request, CancellationToken cancellationToken)
         {
+            var command = new RegisterUserCommand(
+                                request.Email,
+                                request.FirstName,
+                                request.LastName,
+                                request.Password);
+
+            var result = await _mediator.Send(command, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return Created();
         }
 
         // PUT api/<UsersController>/5

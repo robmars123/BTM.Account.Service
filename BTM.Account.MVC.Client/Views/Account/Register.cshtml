@@ -11,6 +11,27 @@
             <form asp-action="Register" method="post">
                 <div class="card">
                     <div class="card-body">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        <div class="mb-3">
+                            <label for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" id="FirstName" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" id="LastName" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
                         <div class="mb-3">
                             <label for="Email" class="form-label">Email Address</label>
                             <input asp-for="Email" class="form-control" id="Email" />

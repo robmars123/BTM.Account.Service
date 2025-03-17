@@ -1,10 +1,11 @@
-
+using BTM.Account.Application.Dependencies;
+using BTM.Account.Infrastructure.Dependencies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace BTM.Account.Api;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -12,10 +13,12 @@ public class Program
         builder.AddServiceDefaults();
 
         // Add services to the container.
-
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
+        builder.Services.AddApplication();
+        builder.Services.AddInfrastructure(builder.Configuration);
 
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

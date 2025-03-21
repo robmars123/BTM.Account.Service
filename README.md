@@ -16,7 +16,7 @@ All projects utilized ASPNET Core .Net 9
 1.	Web Api
 2.	MVC Core 9.0
 3.	Layers: Domain, Application, Infrastruture, Test 
-5.	Duende Identity Server
+5.	Duende Identity Server with EF Core Identity
 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 

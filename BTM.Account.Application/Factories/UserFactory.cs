@@ -1,10 +1,5 @@
 ﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTM.Account.Application.Factories
 {

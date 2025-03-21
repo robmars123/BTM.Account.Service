@@ -22,6 +22,41 @@ namespace BTM.Account.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BTM.Account.Domain.Claims.UserClaim", b =>
+                {
+                    b.Property<int>("UserClaimID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserClaimID"));
+
+                    b.Property<string>("ClaimType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserClaimID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClaims");
+
+                    b.HasData(
+                        new
+                        {
+                            UserClaimID = 1,
+                            ClaimType = "Role",
+                            ClaimValue = "Admin",
+                            UserId = new Guid("14802186-7d6a-41e1-a209-f61fba883837")
+                        });
+                });
+
             modelBuilder.Entity("BTM.Account.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -47,6 +82,22 @@ namespace BTM.Account.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BTM.Account.Domain.Claims.UserClaim", b =>
+                {
+                    b.HasOne("BTM.Account.Domain.Users.User", "User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BTM.Account.Domain.Users.User", b =>
+                {
+                    b.Navigation("Claims");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,7 +2,7 @@
 
 namespace BTM.Account.Infrastructure.Repositories.Base
 {
-    internal class Repository<T> where T : Entity
+    public class Repository<T> where T : Entity
     {
         protected readonly ApplicationDbContext _dbContext;
 

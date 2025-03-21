@@ -1,3 +1,4 @@
+using BTM.Account.Shared.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -61,7 +62,7 @@ public static class Program
 
             options.TokenValidationParameters = new()
             {
-                NameClaimType = "name",
+               NameClaimType = "name",
                 RoleClaimType = "role"
             };
 
@@ -73,8 +74,8 @@ public static class Program
         //Authorization builder
         builder.Services.AddAuthorization(options =>
         {
-        //    options.AddPolicy(GlobalConstants.Roles.Admin, policy =>
-        //policy.RequireClaim("role", GlobalConstants.Roles.Admin));
+            options.AddPolicy(GlobalConstants.Roles.Admin, policy =>
+        policy.RequireClaim("role", GlobalConstants.Roles.Admin));
         });
 
 

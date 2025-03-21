@@ -1,6 +1,5 @@
 ﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Application.Factories;
-using BTM.Account.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BTM.Account.Application.Dependencies
@@ -10,7 +9,6 @@ namespace BTM.Account.Application.Dependencies
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             RegisterDependencies(services);
-            RegisterServices(services);
             RegisterFactories(services);
 
             return services;
@@ -19,11 +17,6 @@ namespace BTM.Account.Application.Dependencies
         private static void RegisterFactories(IServiceCollection services)
         {
             services.AddScoped<IUserFactory, UserFactory>();
-        }
-
-        private static void RegisterServices(IServiceCollection services)
-        {
-            services.AddScoped<IPasswordService, PasswordService>();
         }
 
         private static void RegisterDependencies(IServiceCollection services)

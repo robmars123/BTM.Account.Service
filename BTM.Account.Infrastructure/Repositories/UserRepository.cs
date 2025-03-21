@@ -1,32 +1,37 @@
-﻿using BTM.Account.Domain.Abstractions;
+﻿using BTM.Account.Application.Abstractions;
+using BTM.Account.Domain.Abstractions;
 using BTM.Account.Domain.Users;
 using BTM.Account.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTM.Account.Infrastructure.Repositories
 {
-    internal sealed class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IPasswordService _passwordService;
 
-        public UserRepository(ApplicationDbContext dbContext)
+        public UserRepository(ApplicationDbContext dbContext, IPasswordService passwordService)
             : base(dbContext)
         {
             _dbContext = dbContext;
+            _passwordService = passwordService;
         }
 
-        public async Task<Result> GetByEmailAsync(string email, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(email))
             {
-                return Result.Failure(Error.NullValue);
+                return Result.Failure<User>(Error.NullValue);
             }
 
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+            var user = await _dbContext.Users
+                .Include(u => u.Claims) // Include the claims
+                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
             return (user != null
-                    ? Result.Success(user.Id)
-                     : Result.Failure(Error.UserNotFound));
+                    ? Result.Success(user)
+                     : Result.Failure<User>(Error.UserNotFound));
         }
 
         public async Task<Result> AddAsync(User newUser, CancellationToken cancellationToken)
@@ -43,7 +48,19 @@ namespace BTM.Account.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             // Return the success result with the new user's ID
-            return Result.Success(newUser.Id);
+            return Result.Success();
+        }
+
+        public async Task<bool> ValidateCredentials(string userName, string password)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.Claims) // Include the claims
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == userName.ToLower());
+            if (user != null)
+            {
+                return _passwordService.VerifyPassword(password, user.Password);
+            }
+            return false;
         }
 
     }

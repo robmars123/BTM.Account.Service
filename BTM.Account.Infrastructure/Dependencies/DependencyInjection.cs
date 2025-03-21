@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using BTM.Account.Domain.Users;
+﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Infrastructure.Repositories;
+using BTM.Account.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BTM.Account.Infrastructure.Dependencies
 {
@@ -13,6 +15,7 @@ namespace BTM.Account.Infrastructure.Dependencies
                 IConfiguration configuration)
         {
             AddPersistence(services, configuration);
+            RegisterServices(services);
             AddRepositories(services);
 
             return services;
@@ -24,6 +27,11 @@ namespace BTM.Account.Infrastructure.Dependencies
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("BTM.Account.Infrastructure"));
             });
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            services.AddScoped<IPasswordService, PasswordService>();
         }
 
         private static void AddRepositories(IServiceCollection services)

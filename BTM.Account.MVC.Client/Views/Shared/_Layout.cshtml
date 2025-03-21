@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using Duende.IdentityModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -36,19 +38,22 @@
                         } *@
                     </ul>
                     <ul class="navbar-nav ms-auto">
+                        @{
+                            var name = User.FindFirstValue(JwtClaimTypes.Name);
+                        }
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Hello, @name</a>
+                            </li>
                             <li>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Hello, @User.Identity.Name</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link" href="/Account/Login">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>

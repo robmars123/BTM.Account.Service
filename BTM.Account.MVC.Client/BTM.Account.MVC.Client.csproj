@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BTM.Account.Api.ServiceDefaults\BTM.Account.Api.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
   </ItemGroup>
 
 </Project>

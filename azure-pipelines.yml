@@ -31,3 +31,19 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish BTM.Duende.ASPIdentity'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    arguments: '--output $(Build.ArtifactStagingDirectory)/BTM.Duende.ASPIdentity'
+    projects: '$(Build.SourcesDirectory)/BTM.Duende.ASPIdentity/BTM.Duende.ASPIdentity.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish BTM.Account.Api'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    arguments: '--output $(Build.ArtifactStagingDirectory)/BTM.Account.Api'
+    projects: '$(Build.SourcesDirectory)/BTM.Account.Api/BTM.Account.Api.csproj'

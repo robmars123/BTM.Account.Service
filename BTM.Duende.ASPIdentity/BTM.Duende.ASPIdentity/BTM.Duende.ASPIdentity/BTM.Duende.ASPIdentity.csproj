@@ -30,6 +30,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<PublishOutputPath>$(PublishDir)\BTM.Duende.ASPIdentity\</PublishOutputPath>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <Folder Include="Migrations\" />
 	  <Folder Include="Models\" />
 	</ItemGroup>

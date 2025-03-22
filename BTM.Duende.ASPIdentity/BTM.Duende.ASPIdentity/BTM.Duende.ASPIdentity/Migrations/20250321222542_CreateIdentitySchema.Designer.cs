@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BTM.Duende.ASPIdentity.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(IdentityManagementDbContext))]
     [Migration("20250321222542_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

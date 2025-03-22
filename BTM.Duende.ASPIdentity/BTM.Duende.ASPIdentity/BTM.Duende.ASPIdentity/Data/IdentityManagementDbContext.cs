@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BTM.Duende.ASPIdentity.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class IdentityManagementDbContext : IdentityDbContext<ApplicationUser>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public IdentityManagementDbContext(DbContextOptions<IdentityManagementDbContext> options)
         : base(options)
     {
     }

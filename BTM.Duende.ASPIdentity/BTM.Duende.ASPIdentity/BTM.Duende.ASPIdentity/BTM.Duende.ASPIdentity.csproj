@@ -29,12 +29,9 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Update="appsettings.json">
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<PublishOutputPath>$(PublishDir)\BTM.Duende.ASPIdentity\</PublishOutputPath>
-		</None>
-	</ItemGroup>
+	<PropertyGroup>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	</PropertyGroup>
 	
 	<ItemGroup>
 	  <Folder Include="Migrations\" />

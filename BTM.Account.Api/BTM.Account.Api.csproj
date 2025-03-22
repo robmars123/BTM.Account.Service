@@ -28,10 +28,4 @@
     <ProjectReference Include="..\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<None Update="appsettings.json">
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<PublishOutputPath>$(PublishDir)\BTM.Account.Api\</PublishOutputPath>
-		</None>
-	</ItemGroup>
 </Project>

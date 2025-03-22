@@ -10,11 +10,6 @@ trigger:
 
 pool: Default
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-
 stages:
   - stage: Build
     jobs:
@@ -40,3 +35,13 @@ stages:
             inputs:
               command: 'test'
               projects: '**/*.csproj'
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: DeployJob
+        steps:
+          - script: |
+              echo "Deploying the application to the test environment"
+              # Add your deployment steps here (e.g., copy files, run scripts)
+            displayName: 'Deploy to Test'

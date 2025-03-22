@@ -11,9 +11,9 @@ trigger:
 pool: Default
 
 stages:
-  - stage: Build
+  - stage: Restore
     jobs:
-      - job: BuildJob
+      - job: RestoreJob
         steps:
           - task: UseDotNet@2
             inputs:
@@ -21,27 +21,43 @@ stages:
               version: '9.x'
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'restore'
-              projects: '**/*.csproj'
+          - checkout: self
+            clean: true
 
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'build'
-              projects: '**/*.csproj'
+          - script: dotnet restore
+            displayName: 'Restore dependencies'
 
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'test'
-              projects: '**/*.csproj'
+  - stage: Build
+    dependsOn: Restore  # This makes Build depend on the Restore stage
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: dotnet build --configuration Release
+            displayName: 'Build project'
+
+  - stage: Test
+    dependsOn: Build
+    jobs:
+      - job: TestJob
+        steps:
+          - script: dotnet test --configuration Release --no-build --collect:"Code Coverage"
+            displayName: 'Run tests'
+
+  - stage: Publish
+    dependsOn: Test
+    jobs:
+      - job: PublishJob
+        steps:
+          - script: dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)/publish
+            displayName: 'Publish application'
 
   - stage: Deploy
-    dependsOn: Build
+    dependsOn: Publish
     jobs:
       - job: DeployJob
         steps:
-          - script: |
-              echo "Deploying the application to the test environment"
-              # Add your deployment steps here (e.g., copy files, run scripts)
-            displayName: 'Deploy to Test'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/publish'
+              artifactName: 'drop'
+              publishLocation: 'Container'

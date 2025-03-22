@@ -1,10 +1,11 @@
 ﻿using BTM.Account.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTM.Duende.ASPIdentity.Data;
 
-public class IdentityManagementDbContext : IdentityDbContext<ApplicationUser>
+public class IdentityManagementDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
     public IdentityManagementDbContext(DbContextOptions<IdentityManagementDbContext> options)
         : base(options)

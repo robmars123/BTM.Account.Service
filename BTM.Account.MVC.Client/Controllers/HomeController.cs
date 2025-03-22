@@ -4,7 +4,7 @@ using BTM.Account.MVC.Client.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BTM.Account.MVC.Client.Controllers;
-[Authorize]
+
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

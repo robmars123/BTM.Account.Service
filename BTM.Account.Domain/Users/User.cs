@@ -12,24 +12,24 @@ namespace BTM.Account.Domain.Users
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
 
         public ICollection<UserClaim> Claims { get; set; }
 
-        public User(Guid id, string email, string firstName, string lastName, string password)
+        public User(Guid id, string email, string username, string password)
             :base(id)
         {
             Email = email;
-            FirstName = firstName;
-            LastName = lastName;
+            Username = username;
             Password = password;
         }
 
-        public static User Create(string email, string firstName, string lastName, string password)
+        public static User Create(Guid id, string email, string username, string password)
         {
-            var id = Guid.NewGuid();
+            var newId = Guid.NewGuid();
 
-            return new User(id, email, firstName, lastName, password);
+            return new User(newId, email, username, password);
         }
 
   

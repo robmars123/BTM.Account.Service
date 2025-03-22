@@ -1,6 +1,4 @@
-﻿using BTM.Account.Application.Abstractions;
-using BTM.Account.Application.Factories;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace BTM.Account.Application.Dependencies
 {
@@ -16,7 +14,7 @@ namespace BTM.Account.Application.Dependencies
 
         private static void RegisterFactories(IServiceCollection services)
         {
-            services.AddScoped<IUserFactory, UserFactory>();
+           // services.AddScoped<IUserFactory, UserFactory>();
         }
 
         private static void RegisterDependencies(IServiceCollection services)

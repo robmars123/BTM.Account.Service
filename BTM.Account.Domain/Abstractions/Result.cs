@@ -1,59 +1,38 @@
-﻿
-using System.Diagnostics.CodeAnalysis;
-
-namespace BTM.Account.Domain.Abstractions
+﻿namespace BTM.Account.Domain.Abstractions
 {
+
     public class Result
     {
-        public Result(bool isSuccess, Error error)
+        public bool IsSuccess { get; private set; }
+        public string ErrorMessage { get; private set; }
+
+        public Result()
         {
-            if (isSuccess && error != Error.None)
-            {
-                throw new InvalidOperationException();
-            }
-
-            if (!isSuccess && error == Error.None)
-            {
-                throw new InvalidOperationException();
-            }
-
-            IsSuccess = isSuccess;
-            Error = error;
+            IsSuccess = true;
+            ErrorMessage = string.Empty;
         }
 
-        public bool IsSuccess { get; }
+        public Result(string errorMessage)
+        {
+            IsSuccess = false;
+            ErrorMessage = errorMessage;
+        }
 
-        public bool IsFailure => !IsSuccess;
-
-        public Error Error { get; }
-
-        public static Result Success() => new(true, Error.None);
-
-        public static Result Failure(Error error) => new(false, error);
-
-        public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
-
-        public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
-
-        public static Result<TValue> Create<TValue>(TValue? value) =>
-            value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
+        public static Result Success() => new Result();
+        public static Result Failure(string errorMessage) => new Result(errorMessage);
     }
 
-    public class Result<TValue> : Result
+    public class Result<T> : Result
     {
-        private readonly TValue? _value;
+        public T Data { get; private set; }
 
-        public Result(TValue? value, bool isSuccess, Error error)
-            : base(isSuccess, error)
+        public Result(T data) : base()
         {
-            _value = value;
+            Data = data;
         }
 
-        [NotNull]
-        public TValue Value => IsSuccess
-            ? _value!
-            : throw new InvalidOperationException("The value of a failure result can not be accessed.");
-
-        public static implicit operator Result<TValue>(TValue? value) => Create(value);
+        public Result(string errorMessage) : base(errorMessage) { }
+        public static new Result<T> Success(T data) => new Result<T>(data);
+        public static new Result<T> Failure(string errorMessage) => new Result<T>(errorMessage);
     }
 }

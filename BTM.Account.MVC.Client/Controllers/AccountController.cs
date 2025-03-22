@@ -42,8 +42,7 @@ namespace BTM.Account.MVC.Client.Controllers
                 UserRequestModel request = new UserRequestModel
                 {
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
+                    Username = model.Username,
                     Password = model.Password
                 };
 
@@ -80,7 +79,8 @@ namespace BTM.Account.MVC.Client.Controllers
 
                     // Add the error message to ModelState for displaying in the registration view
                     ModelState.AddModelError(string.Empty, result.Message);
-                    return View(model);  // Return to the registration page with the error message.
+
+                    return View(RegisterViewModel.Reset());  // Return to the registration page with the error message.
                 }
 
                 // Redirect to a success page or login page

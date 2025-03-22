@@ -1,68 +1,83 @@
 ﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Domain.Abstractions;
 using BTM.Account.Domain.Users;
-using BTM.Account.Infrastructure.Repositories.Base;
-using Microsoft.EntityFrameworkCore;
+using BTM.Account.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BTM.Account.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : IUserRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IPasswordService _passwordService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserRepository(ApplicationDbContext dbContext, 
-                                IPasswordService passwordService)
-            : base(dbContext)
+        public UserRepository(UserManager<ApplicationUser> userManager)
         {
-            _dbContext = dbContext;
-            _passwordService = passwordService;
+            _userManager = userManager;
         }
 
-        public async Task<Result<User>> GetByEmailAsync(string email, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(email))
+            ApplicationUser? applicationUser = await _userManager.FindByIdAsync(userId);
+
+            if (applicationUser == null || applicationUser.Email == null || applicationUser.UserName == null)
             {
-                return Result.Failure<User>(Error.NullValue);
+                return new Result<User>("User not found");
             }
 
-            var user = await _dbContext.Users
-                .Include(u => u.Claims) // Include the claims
-                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+            User user = User.Create(applicationUser.Id, applicationUser.Email, applicationUser.UserName, applicationUser.PasswordHash!);
 
-            return (user != null
-                    ? Result.Success(user)
-                     : Result.Failure<User>(Error.UserNotFound));
+            return new Result<User>(user);
         }
 
-        public async Task<Result> AddAsync(User newUser, CancellationToken cancellationToken)
+        public async Task<Result> CreateUserAsync(User user, string password, CancellationToken cancellationToken)
         {
-            if (newUser == null)
-                return new Result(false, Error.NullValue); 
-
-            var existingUserResult = await GetByEmailAsync(newUser.Email, cancellationToken);
-            if (existingUserResult.IsSuccess)
-                return Result.Failure(Error.UserAlreadyExists);
-
-            // If no existing user is found, add the new user to the database
-            await _dbContext.Users.AddAsync(newUser);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            // Return the success result with the new user's ID
-            return Result.Success();
-        }
-
-        public async Task<bool> ValidateCredentials(string userName, string password)
-        {
-            var user = await _dbContext.Users
-                .Include(u => u.Claims) // Include the claims
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == userName.ToLower());
-            if (user != null)
+            try
             {
-                return _passwordService.VerifyPassword(password, user.Password);
+                ApplicationUser applicationUser = new ApplicationUser
+                {
+                    Email = user.Email,
+                    UserName = user.Username
+                };
+                IdentityResult result = await _userManager.CreateAsync(applicationUser, password);
+
+                if (!result.Succeeded)
+                {
+                    return new Result(result.ToString());
+                }
+
+                return Result.Success();
             }
-            return false;
+            catch (Exception ex)
+            {
+                return new Result(ex.Message);
+            }
         }
 
+        public async Task<Result> UpdateUserAsync(User user, CancellationToken cancellationToken)
+        {
+            ApplicationUser applicationUser = new ApplicationUser
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.Username
+            };
+            IdentityResult result = await _userManager.UpdateAsync(applicationUser);
+            return new Result(result.ToString());
+        }
+
+        public async Task<Result<User>> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            IdentityUser<Guid> applicationUser = await _userManager.FindByEmailAsync(email);
+
+            if (applicationUser == null || applicationUser.Email == null || applicationUser.UserName == null)
+            {
+                return new Result<User>("User not found");
+            }
+
+            User user = User.Create(applicationUser.Id, applicationUser.Email, applicationUser.UserName, applicationUser.PasswordHash!);
+
+            return new Result<User>(user);
+        }
     }
+
 }

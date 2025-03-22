@@ -17,9 +17,18 @@ internal static class HostingExtensions
         builder.Services.AddDbContext<IdentityManagementDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<IdentityManagementDbContext>()
-            .AddDefaultTokenProviders();
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+        {
+            // Password complexity rules
+            options.Password.RequireDigit = false; // Requires at least one digit
+            options.Password.RequireLowercase = false; // Requires at least one lowercase letter
+            options.Password.RequireUppercase = false; // Requires at least one uppercase letter
+            options.Password.RequireNonAlphanumeric = false; // Requires at least one non-alphanumeric character (e.g., @, #, !)
+            options.Password.RequiredLength = 5; // Minimum length for passwords
+            options.Password.RequiredUniqueChars = 0; // Number of unique characters in the password
+        })
+                .AddEntityFrameworkStores<IdentityManagementDbContext>()
+                .AddDefaultTokenProviders();
 
         builder.Services
             .AddIdentityServer(options =>

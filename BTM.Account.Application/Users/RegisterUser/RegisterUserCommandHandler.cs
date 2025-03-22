@@ -5,29 +5,27 @@ using BTM.Account.Domain.Users;
 
 namespace BTM.Account.Application.Users.RegisterUser
 {
-    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
+    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IUserFactory _userFactory;
 
-        public RegisterUserCommandHandler(IUserRepository userRepository, IUserFactory userFactory)
+        public RegisterUserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _userFactory = userFactory;
         }
-        public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                User? user = _userFactory.CreateUser(request.Email, request.FirstName, request.LastName, request.Password);
+                User? user = User.Create(Guid.NewGuid(), request.Email, request.Username, request.Password);
 
-                Result result = await _userRepository.AddAsync(user, cancellationToken);
+                Result result = await _userRepository.CreateUserAsync(user, user.Password, cancellationToken);
 
-                return result.IsFailure ? Result.Failure<Guid>(result.Error) : Result.Success(user.Id);
+                return result;
             }
             catch (Exception ex)
             {
-                return (Result<Guid>)Result.Failure(new Error("UnexpectedError", ex.Message));
+                return Result.Failure("No user found");
             }
         }
     }

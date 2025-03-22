@@ -1,5 +1,6 @@
 ﻿using BTM.Account.Api.Models;
 using BTM.Account.Application.Users.RegisterUser;
+using BTM.Account.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,15 +46,14 @@ namespace BTM.Account.Api.Controllers
         {
             var command = new RegisterUserCommand(
                                 request.Email,
-                                request.FirstName,
-                                request.LastName,
+                                request.Username,
                                 request.Password);
 
             var result = await _mediator.Send(command, cancellationToken);
 
-            if (result.IsFailure)
+            if (!result.IsSuccess)
             {
-                return BadRequest(result.Error);
+                return BadRequest(Result.Failure("An error occurred with your request."));
             }
 
             return Created();

@@ -5,8 +5,9 @@ namespace BTM.Account.Application.Abstractions
 {
     public interface IUserRepository
     {
-        Task<Result<User>> GetByEmailAsync(string email, CancellationToken cancellationToken);
-        Task<Result> AddAsync(User newUser, CancellationToken cancellationToken);
-        Task<bool> ValidateCredentials(string userName, string password);
+        Task<Result> CreateUserAsync(User model, string password, CancellationToken cancellationToken);
+        Task<Result<User>> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
+        Task<Result<User>> GetUserByIdAsync(string userId, CancellationToken cancellationToken);
+        Task<Result> UpdateUserAsync(User model, CancellationToken cancellationToken);
     }
 }

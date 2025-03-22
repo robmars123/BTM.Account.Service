@@ -11,7 +11,8 @@ namespace BTM.Account.Infrastructure.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly IPasswordService _passwordService;
 
-        public UserRepository(ApplicationDbContext dbContext, IPasswordService passwordService)
+        public UserRepository(ApplicationDbContext dbContext, 
+                                IPasswordService passwordService)
             : base(dbContext)
         {
             _dbContext = dbContext;

@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using BTM.Account.MVC.Client.Models;
+using BTM.Account.MVC.Client.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BTM.Account.MVC.Client.ViewModels;
-using BTM.Account.MVC.Client.Models;
-using System.Text;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text;
 
 namespace BTM.Account.MVC.Client.Controllers
 {

@@ -1,6 +1,7 @@
-﻿using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 
-namespace BTM.Duende.ASPIdentity;
+namespace BTM.IdentityServer.BTM.Duende.ASPIdentity;
 
 public static class Config
 {
@@ -11,41 +12,61 @@ public static class Config
             new IdentityResources.Profile(),
         };
 
+    public static IEnumerable<ApiResource> ApiResources =>
+ new ApiResource[]
+     {
+             new ApiResource("AccountAPI",
+                 "BTM Account API",
+                 new [] { "role" })
+             {
+                 Scopes = { "AccountApi.fullaccess",
+                     "AccountAPI.read",
+                     "AccountAPI.write"},
+                ApiSecrets = { new Secret("apisecret".Sha256()) }
+             }
+     };
+
     public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[]
+    new ApiScope[]
         {
-            new ApiScope("scope1")
-        };
+                //clients should match these scopes
+                new ApiScope("AccountAPI.fullaccess"),
+                new ApiScope("AccountAPI.read"),
+                new ApiScope("AccountAPI.write")};
 
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
-            // m2m client credentials flow client
-            new Client
-            {
-                ClientId = "m2m.client",
-                ClientName = "Client Credentials Client",
-
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-                AllowedScopes = { "scope1" }
-            },
-
-            //// interactive client using code flow + pkce
-            //new Client
-            //{
-            //    ClientId = "interactive",
-            //    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-            //    AllowedGrantTypes = GrantTypes.Code,
-
-            //    RedirectUris = { "https://localhost:44300/signin-oidc" },
-            //    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-            //    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
-
-            //    AllowOfflineAccess = true,
-            //    AllowedScopes = { "openid", "profile", "scope2" }
-            //},
+            new Client()
+                {
+                    ClientName = "Account Service Web Client",
+                    //this is the client id that will be used by the client application to identify itself
+                    //BTM.Account.MVC.Client
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AllowOfflineAccess = true,
+                    ClientId = "Account.MVC.Client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                                        RedirectUris = new List<string>()
+                    {
+                        "https://localhost:7282/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = new List<string>()
+                    {
+                        "https://localhost:7282/signout-callback-oidc"
+                    } ,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "roles",
+                        "AccountAPI.fullaccess",//clients should match these scopes
+                        "AccountAPI.read",//clients should match these scopes
+                        "AccountAPI.write",//clients should match these scopes
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("mysecret".Sha256())
+                    },
+            }
         };
 }

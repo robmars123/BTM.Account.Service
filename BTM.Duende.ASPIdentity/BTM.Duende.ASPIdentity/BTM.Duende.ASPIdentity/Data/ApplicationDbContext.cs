@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BTM.Account.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using BTM.Duende.ASPIdentity.Models;
 
 namespace BTM.Duende.ASPIdentity.Data;
 

@@ -1,7 +1,9 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using BTM.Account.Infrastructure.Models;
 using Duende.IdentityModel;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
@@ -10,8 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BTM.Duende.ASPIdentity.Models;
-using Duende.IdentityServer;
 
 namespace BTM.Duende.ASPIdentity.Pages.Logout;
 

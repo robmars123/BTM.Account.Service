@@ -1,6 +1,7 @@
-using Duende.IdentityServer;
+using BTM.Account.Infrastructure.Models;
 using BTM.Duende.ASPIdentity.Data;
-using BTM.Duende.ASPIdentity.Models;
+using BTM.IdentityServer.BTM.Duende.ASPIdentity;
+using Duende.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -59,8 +60,6 @@ internal static class HostingExtensions
         {
             app.UseDeveloperExceptionPage();
         }
-
-        EnsureSeedData(app);
 
         app.UseStaticFiles();
         app.UseRouting();

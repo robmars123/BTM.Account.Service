@@ -1,10 +1,10 @@
-﻿using System.Security.Claims;
+﻿using BTM.Account.Infrastructure.Models;
 using BTM.Duende.ASPIdentity.Data;
-using BTM.Duende.ASPIdentity.Models;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Duende.IdentityModel;
+using System.Security.Claims;
 
 namespace BTM.Duende.ASPIdentity;
 
@@ -15,7 +15,7 @@ public class SeedData
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            context.Database.EnsureDeleted();
+
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -28,7 +28,7 @@ public class SeedData
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
                 };
-                var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+                var result = userMgr.CreateAsync(alice, "tester").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -56,11 +56,11 @@ public class SeedData
             {
                 bob = new ApplicationUser
                 {
-                    UserName = "bob",
+                    UserName = "admin",
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true
                 };
-                var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+                var result = userMgr.CreateAsync(bob, "tester").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);

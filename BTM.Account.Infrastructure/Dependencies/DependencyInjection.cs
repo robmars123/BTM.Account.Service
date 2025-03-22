@@ -2,7 +2,6 @@
 using BTM.Account.Infrastructure.Repositories;
 using BTM.Account.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

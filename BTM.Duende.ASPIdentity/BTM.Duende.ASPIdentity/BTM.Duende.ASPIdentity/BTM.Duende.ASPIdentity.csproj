@@ -28,4 +28,12 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BTM.Account.Infrastructure\BTM.Account.Infrastructure.csproj" />
+	</ItemGroup>
 </Project>

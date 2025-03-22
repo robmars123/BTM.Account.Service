@@ -20,7 +20,6 @@
     <ProjectReference Include="..\BTM.Account.Api\BTM.Account.Api.csproj" />
     <ProjectReference Include="..\BTM.Account.MVC.Client\BTM.Account.MVC.UI.csproj" />
     <ProjectReference Include="..\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity.csproj" />
-    <ProjectReference Include="..\BTM.IdentityServer\BTM.IdentityServer.csproj" />
   </ItemGroup>
 
 </Project>

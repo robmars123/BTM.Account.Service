@@ -15,6 +15,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.2.0" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.3" />
@@ -40,6 +44,12 @@
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
 	  <Folder Include="Models\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Include="appsettings.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

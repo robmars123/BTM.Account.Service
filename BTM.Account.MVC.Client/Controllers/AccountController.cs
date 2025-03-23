@@ -30,65 +30,52 @@ namespace BTM.Account.MVC.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid || model.Password != model.ConfirmPassword)
             {
                 if (model.Password != model.ConfirmPassword)
-                {
-                    // This check is redundant due to the [Compare] attribute
                     ModelState.AddModelError(string.Empty, "Passwords do not match.");
-                    return View(model);
-                }
-
-                UserRequestModel request = new UserRequestModel
-                {
-                    Email = model.Email,
-                    Username = model.Username,
-                    Password = model.Password
-                };
-
-                var httpClient = _httpClientFactory.CreateClient("AccountAPI");
-
-                // Serialize the model to JSON to send in the request body
-                var jsonContent = new StringContent(
-                    JsonConvert.SerializeObject(request),
-                    Encoding.UTF8,
-                    "application/json"  // Specify that the content type is JSON
-                );
-
-                var httpRequest = new HttpRequestMessage(
-                    HttpMethod.Post,
-                    "/api/users/") // Ensure this matches the correct API endpoint for user registration
-                {
-                    Content = jsonContent  // Add the serialized model as content to the request
-                };
-
-                var response = await httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var responseJson = await response.Content.ReadAsStringAsync();
-
-                    var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseJson);
-
-                    // You can access the specific error details
-                    var errorCode = errorResponse?.code;
-                    var errorMessage = errorResponse?.name ?? "Unknown error";
-
-                    // Optionally, log the error or display it in a user-friendly way
-                    var result = Result.FailureResult(errorMessage);
-
-                    // Add the error message to ModelState for displaying in the registration view
-                    ModelState.AddModelError(string.Empty, result.Message);
-
-                    return View(RegisterViewModel.Reset());  // Return to the registration page with the error message.
-                }
-
-                // Redirect to a success page or login page
-                return RedirectToAction("Login", "Account");
+                return View(model);
             }
 
-            return View(model);
+            var request = new UserRequestModel
+            {
+                Email = model.Email,
+                Username = model.Username,
+                Password = model.Password
+            };
+
+            //TODO: can be moved to a service
+            //--------------------------------------------------------------------------------
+            var httpClient = _httpClientFactory.CreateClient("AccountAPI");
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(request),Encoding.UTF8,"application/json");  // Specify that the content type is JSON
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/api/users/") // Ensure this matches the correct API endpoint for user registration
+            {
+                Content = jsonContent  // Add the serialized model as content to the request
+            };
+
+            var response = await httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+            //--------------------------------------------------------------------------------
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseJson = await response.Content.ReadAsStringAsync();
+
+                var errorResponse = JsonConvert.DeserializeObject<Result>(responseJson);
+
+                if (errorResponse != null)
+                {
+                    foreach (var error in errorResponse.ErrorMessages)
+                    {
+                        ModelState.AddModelError(string.Empty, error);
+                    }
+                }
+
+                return View(RegisterViewModel.Reset());  // Return to the registration page with the error message.
+            }
+
+            return RedirectToAction("Login", "Account");
         }
+
 
 
         public async Task<IActionResult> Login()

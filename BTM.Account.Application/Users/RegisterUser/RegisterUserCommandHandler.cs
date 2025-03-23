@@ -19,13 +19,15 @@ namespace BTM.Account.Application.Users.RegisterUser
             {
                 User? user = User.Create(Guid.NewGuid(), request.Email, request.Username, request.Password);
 
-                Result result = await _userRepository.CreateUserAsync(user, user.Password, cancellationToken);
+                var response = await _userRepository.CreateUserAsync(user, user.Password, cancellationToken);
 
-                return result;
+                if (!response.IsSuccess) return Result.FailureResult(response.ErrorMessages);
+
+                return Result.SuccessResult();
             }
             catch (Exception ex)
             {
-                return Result.Failure("No user found");
+                return Result.FailureResult("No user found");
             }
         }
     }

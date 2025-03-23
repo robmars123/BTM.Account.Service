@@ -53,7 +53,7 @@ namespace BTM.Account.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(Result.Failure("An error occurred with your request."));
+                return BadRequest(Result.FailureResult(result.ErrorMessages));
             }
 
             return Created();

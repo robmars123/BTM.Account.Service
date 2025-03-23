@@ -21,12 +21,12 @@ namespace BTM.Account.Infrastructure.Repositories
 
             if (applicationUser == null || applicationUser.Email == null || applicationUser.UserName == null)
             {
-                return new Result<User>("User not found");
+                return new Result<User>().FailureResult("User not found");
             }
 
             User user = User.Create(applicationUser.Id, applicationUser.Email, applicationUser.UserName, applicationUser.PasswordHash!);
 
-            return new Result<User>(user);
+            return new Result<User>().SuccessResult(user);
         }
 
         public async Task<Result> CreateUserAsync(User user, string password, CancellationToken cancellationToken)
@@ -42,14 +42,14 @@ namespace BTM.Account.Infrastructure.Repositories
 
                 if (!result.Succeeded)
                 {
-                    return new Result(result.ToString());
+                    return Result.FailureResult(result.Errors.Select(e => e.Description).ToList());
                 }
 
-                return Result.Success();
+                return Result.SuccessResult();
             }
             catch (Exception ex)
             {
-                return new Result(ex.Message);
+                return Result.FailureResult(ex.Message);
             }
         }
 
@@ -62,7 +62,7 @@ namespace BTM.Account.Infrastructure.Repositories
                 UserName = user.Username
             };
             IdentityResult result = await _userManager.UpdateAsync(applicationUser);
-            return new Result(result.ToString());
+            return Result.SuccessResult(result.ToString());
         }
 
         public async Task<Result<User>> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
@@ -71,12 +71,12 @@ namespace BTM.Account.Infrastructure.Repositories
 
             if (applicationUser == null || applicationUser.Email == null || applicationUser.UserName == null)
             {
-                return new Result<User>("User not found");
+                return new Result<User>().FailureResult("User not found");
             }
 
             User user = User.Create(applicationUser.Id, applicationUser.Email, applicationUser.UserName, applicationUser.PasswordHash!);
 
-            return new Result<User>(user);
+            return new Result<User>().SuccessResult(user);
         }
     }
 

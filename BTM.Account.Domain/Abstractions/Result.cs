@@ -3,36 +3,38 @@
 
     public class Result
     {
-        public bool IsSuccess { get; private set; }
-        public string ErrorMessage { get; private set; }
+        public bool IsSuccess { get; set; }
+        public List<string> ErrorMessages { get; set; } // List to hold multiple error messages
+        public object? Data { get; set; }
 
-        public Result()
+        public static Result SuccessResult(object? data = null)
         {
-            IsSuccess = true;
-            ErrorMessage = string.Empty;
+            return new Result { IsSuccess = true, ErrorMessages = new List<string>(), Data = data };
         }
 
-        public Result(string errorMessage)
+        public static Result FailureResult(List<string> errorMessages)
         {
-            IsSuccess = false;
-            ErrorMessage = errorMessage;
+            return new Result { IsSuccess = false, ErrorMessages = errorMessages };
         }
 
-        public static Result Success() => new Result();
-        public static Result Failure(string errorMessage) => new Result(errorMessage);
+        public static Result FailureResult(string errorMessage)
+        {
+            return new Result { IsSuccess = false, ErrorMessages = new List<string> { errorMessage } };
+        }
     }
 
-    public class Result<T> : Result
+    public class Result<T>
     {
-        public T Data { get; private set; }
-
-        public Result(T data) : base()
+        public bool IsSuccess { get; set; }
+        public string? ErrorMessages { get; set; }
+        public object? Data { get; set; }
+        public Result<T> SuccessResult(T data)
         {
-            Data = data;
+            return new Result<T> { IsSuccess = true, ErrorMessages = string.Empty, Data = data };
         }
-
-        public Result(string errorMessage) : base(errorMessage) { }
-        public static new Result<T> Success(T data) => new Result<T>(data);
-        public static new Result<T> Failure(string errorMessage) => new Result<T>(errorMessage);
+        public Result<T> FailureResult(string message)
+        {
+            return new Result<T> { IsSuccess = false, ErrorMessages = message };
+        }
     }
 }

@@ -1,23 +1,25 @@
-﻿using BTM.Account.MVC.Client.Models;
+﻿using BTM.Account.Application.Factories.HttpRequest;
+using BTM.Account.MVC.Client.Models;
 using BTM.Account.MVC.Client.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
-using System.Text;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IRequestFactory _httpRequestFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IHttpClientFactory httpClientFactory)
+        public AccountController(IRequestFactory httpRequestFactory, IHttpContextAccessor httpContextAccessor)
         {
-            _httpClientFactory = httpClientFactory ??
-                throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpRequestFactory = httpRequestFactory;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -44,18 +46,8 @@ namespace BTM.Account.MVC.Client.Controllers
                 Password = model.Password
             };
 
-            //TODO: can be moved to a service
-            //--------------------------------------------------------------------------------
-            var httpClient = _httpClientFactory.CreateClient("AccountAPI");
-            var jsonContent = new StringContent(JsonConvert.SerializeObject(request),Encoding.UTF8,"application/json");  // Specify that the content type is JSON
+            var response = await _httpRequestFactory.SendPostRequestAsync("api/users", request, string.Empty);
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/api/users/") // Ensure this matches the correct API endpoint for user registration
-            {
-                Content = jsonContent  // Add the serialized model as content to the request
-            };
-
-            var response = await httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-            //--------------------------------------------------------------------------------
             if (!response.IsSuccessStatusCode)
             {
                 var responseJson = await response.Content.ReadAsStringAsync();

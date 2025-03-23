@@ -1,3 +1,6 @@
+using BTM.Account.Application.Factories.HttpRequest;
+using BTM.Account.Infrastructure.Dependencies;
+using BTM.Account.Infrastructure.Factories;
 using BTM.Account.Shared.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,7 +17,9 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
 
-        // Add services to the container.
+        // Add services to the container..
+        RegisterFactories(builder);
+
         builder.Services.AddControllersWithViews()
                     .AddJsonOptions(configure => configure.JsonSerializerOptions.PropertyNamingPolicy = null);
 
@@ -28,7 +33,6 @@ public static class Program
             client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         });
         builder.Services.AddOpenIdConnectAccessTokenManagement();
-
 
         builder.Services.AddHttpClient("IDPClient", client =>
         {
@@ -62,7 +66,7 @@ public static class Program
 
             options.TokenValidationParameters = new()
             {
-               NameClaimType = "name",
+                NameClaimType = "name",
                 RoleClaimType = "role"
             };
 
@@ -104,5 +108,10 @@ public static class Program
             .WithStaticAssets();
 
         app.Run();
+    }
+
+    private static void RegisterFactories(WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IRequestFactory, RequestFactory>();
     }
 }

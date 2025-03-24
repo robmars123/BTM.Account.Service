@@ -1,12 +1,12 @@
 ﻿using BTM.Account.Application.Factories.HttpRequest;
-using BTM.Account.MVC.Client.Models;
-using BTM.Account.MVC.Client.ViewModels;
+using BTM.Account.MVC.UI.Models.Commands;
+using BTM.Account.MVC.UI.Models.Requests;
+using BTM.Account.MVC.UI.Models.Results;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 
 namespace BTM.Account.MVC.Client.Controllers
@@ -14,12 +14,10 @@ namespace BTM.Account.MVC.Client.Controllers
     public class AccountController : Controller
     {
         private readonly IRequestFactory _httpRequestFactory;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(IRequestFactory httpRequestFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpRequestFactory = httpRequestFactory;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -30,39 +28,24 @@ namespace BTM.Account.MVC.Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterRequest model)
         {
-            if (!ModelState.IsValid || model.Password != model.ConfirmPassword)
-            {
-                if (model.Password != model.ConfirmPassword)
-                    ModelState.AddModelError(string.Empty, "Passwords do not match.");
-                return View(model);
-            }
-
-            var request = new UserRequestModel
-            {
-                Email = model.Email,
-                Username = model.Username,
-                Password = model.Password
-            };
+            var request = new UserRequestCommand(model.Email,model.Username,model.Password);
 
             var response = await _httpRequestFactory.SendPostRequestAsync("api/users", request, string.Empty);
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseJson = await response.Content.ReadAsStringAsync();
-
                 var errorResponse = JsonConvert.DeserializeObject<Result>(responseJson);
 
                 if (errorResponse != null)
                 {
                     foreach (var error in errorResponse.ErrorMessages)
-                    {
                         ModelState.AddModelError(string.Empty, error);
-                    }
                 }
 
-                return View(RegisterViewModel.Reset());  // Return to the registration page with the error message.
+                return View(RegisterRequest.Reset()); 
             }
 
             return RedirectToAction("Login", "Account");

@@ -27,4 +27,9 @@
     <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Queries\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,6 @@
-using System.Diagnostics;
+using BTM.Account.MVC.UI.Models.Results;
 using Microsoft.AspNetCore.Mvc;
-using BTM.Account.MVC.Client.Models;
-using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace BTM.Account.MVC.Client.Controllers;
 

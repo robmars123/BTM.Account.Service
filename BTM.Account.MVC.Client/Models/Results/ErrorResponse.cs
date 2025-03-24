@@ -1,4 +1,4 @@
-﻿namespace BTM.Account.MVC.Client.Models
+﻿namespace BTM.Account.MVC.UI.Models.Results
 {
     public class ErrorResponse
     {

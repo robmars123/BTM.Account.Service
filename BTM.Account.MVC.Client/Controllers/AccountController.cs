@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 
 namespace BTM.Account.MVC.Client.Controllers
@@ -36,8 +37,7 @@ namespace BTM.Account.MVC.Client.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                var responseJson = await response.Content.ReadAsStringAsync();
-                var errorResponse = JsonConvert.DeserializeObject<Result>(responseJson);
+                var errorResponse = JsonConvert.DeserializeObject<Result>(await response.Content.ReadAsStringAsync());
 
                 if (errorResponse != null)
                 {
@@ -50,8 +50,6 @@ namespace BTM.Account.MVC.Client.Controllers
 
             return RedirectToAction("Login", "Account");
         }
-
-
 
         public async Task<IActionResult> Login()
         {

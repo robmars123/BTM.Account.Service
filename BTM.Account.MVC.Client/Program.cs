@@ -25,14 +25,14 @@ public static class Program
 
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+        builder.Services.AddOpenIdConnectAccessTokenManagement();
         // create an HttpClient used for accessing the API
         builder.Services.AddHttpClient("AccountAPI", client =>
         {
             client.BaseAddress = new Uri(builder.Configuration["AccountAPI"]);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-        });
-        builder.Services.AddOpenIdConnectAccessTokenManagement();
+        }).AddUserAccessTokenHandler(); // adds the handler that will include the access token as a bearer token in the request
 
         builder.Services.AddHttpClient("IDPClient", client =>
         {
@@ -64,6 +64,10 @@ public static class Program
             options.ClaimActions.DeleteClaim("sid");
             options.ClaimActions.DeleteClaim("idp");
 
+            //Add scopes for API
+            options.Scope.Add("AccountAPI.read");
+            options.Scope.Add("AccountAPI.write");
+
             options.TokenValidationParameters = new()
             {
                 NameClaimType = "name",
@@ -90,7 +94,7 @@ public static class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler("/Account/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
@@ -104,7 +108,7 @@ public static class Program
         app.MapStaticAssets();
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
+            pattern: "{controller=Account}/{action=Index}/{id?}")
             .WithStaticAssets();
 
         app.Run();

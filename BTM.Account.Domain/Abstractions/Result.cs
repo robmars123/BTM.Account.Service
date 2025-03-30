@@ -27,7 +27,7 @@
     {
         public bool IsSuccess { get; set; }
         public string? ErrorMessages { get; set; }
-        public object? Data { get; set; }
+        public T? Data { get; set; }
         public Result<T> SuccessResult(T data)
         {
             return new Result<T> { IsSuccess = true, ErrorMessages = string.Empty, Data = data };

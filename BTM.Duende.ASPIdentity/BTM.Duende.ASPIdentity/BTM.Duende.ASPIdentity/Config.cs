@@ -22,7 +22,7 @@ public static class Config
                  Scopes = { "AccountApi.fullaccess",
                      "AccountAPI.read",
                      "AccountAPI.write"},
-                ApiSecrets = { new Secret("apisecret".Sha256()) }
+                ApiSecrets = { new Secret("mysecret".Sha256()) }
              }
      };
 

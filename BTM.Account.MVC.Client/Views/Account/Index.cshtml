@@ -1,0 +1,50 @@
+﻿@using BTM.Account.MVC.UI.Models
+@model UserDTO
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="account-panel">
+    <h2>Account Details</h2>
+
+    <div class="account-info">
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <span id="Email">@Model?.Email</span>
+        </div>
+
+        <div class="form-group">
+            <label for="Username">Username:</label>
+            <span id="Username">@Model?.Username</span>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <a href="@Url.Action("Edit", "Account")" class="btn btn-primary">Edit Profile</a>
+        <a href="@Url.Action("LogOut", "Account")" class="btn btn-danger">Log Out</a>
+    </div>
+</div>
+
+<!-- Optionally, you can style it -->
+<style>
+    .account-panel {
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        max-width: 500px;
+    }
+
+    .account-info .form-group {
+        margin-bottom: 15px;
+    }
+
+    .account-info label {
+        font-weight: bold;
+    }
+
+    .buttons .btn {
+        margin-right: 10px;
+    }
+</style>
+

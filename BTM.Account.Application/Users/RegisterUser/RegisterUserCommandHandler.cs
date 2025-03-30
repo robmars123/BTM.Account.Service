@@ -27,7 +27,7 @@ namespace BTM.Account.Application.Users.RegisterUser
             }
             catch (Exception ex)
             {
-                return Result.FailureResult("No user found");
+                return Result.FailureResult("No user has been created.");
             }
         }
     }

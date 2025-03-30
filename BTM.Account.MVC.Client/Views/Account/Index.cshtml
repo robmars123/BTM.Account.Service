@@ -1,7 +1,8 @@
 ﻿@using BTM.Account.MVC.UI.Models
 @model UserDTO
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Account Details";
 }
 
 <div class="account-panel">
@@ -20,8 +21,8 @@
     </div>
 
     <div class="buttons">
-        <a href="@Url.Action("Edit", "Account")" class="btn btn-primary">Edit Profile</a>
-        <a href="@Url.Action("LogOut", "Account")" class="btn btn-danger">Log Out</a>
+        <a asp-action="Edit" asp-controller="Account" class="btn btn-primary">Edit Profile</a>
+        <a asp-action="LogOut" asp-controller="Account" class="btn btn-danger">Log Out</a>
     </div>
 </div>
 
@@ -47,4 +48,3 @@
         margin-right: 10px;
     }
 </style>
-

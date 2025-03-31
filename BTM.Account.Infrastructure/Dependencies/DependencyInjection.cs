@@ -1,6 +1,5 @@
 ﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Application.Factories.HttpRequest;
-using BTM.Account.Infrastructure.Factories;
 using BTM.Account.Infrastructure.Models;
 using BTM.Account.Infrastructure.Repositories;
 using BTM.Account.Infrastructure.Services;
@@ -20,7 +19,6 @@ namespace BTM.Account.Infrastructure.Dependencies
             AddPersistence(services, configuration);
             RegisterServices(services);
             RegisterRepositories(services);
-            RegisterFactories(services);
 
             return services;
         }
@@ -52,16 +50,12 @@ namespace BTM.Account.Infrastructure.Dependencies
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IHttpRequestService, HttpRequestService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
-        }
-
-        private static void RegisterFactories(IServiceCollection services)
-        {
-            services.AddScoped<IRequestFactory, RequestFactory>();
         }
     }
 }

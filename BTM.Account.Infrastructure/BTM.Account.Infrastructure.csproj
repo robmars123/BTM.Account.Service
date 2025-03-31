@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BTM.Account.Application\BTM.Account.Application.csproj" />
     <ProjectReference Include="..\BTM.Account.Domain\BTM.Account.Domain.csproj" />
+    <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,61 +1,54 @@
-﻿using Azure.Core;
+﻿using BTM.Account.Application.Abstractions;
+using BTM.Account.Application.DTOs;
 using BTM.Account.Application.Factories.HttpRequest;
-using BTM.Account.Domain.Users;
-using BTM.Account.MVC.UI.Models;
+using BTM.Account.Application.Results;
+using BTM.Account.Application.Users.RegisterUser;
+using BTM.Account.Infrastructure.Services;
+using BTM.Account.MVC.UI.Controllers.Base;
 using BTM.Account.MVC.UI.Models.Commands;
 using BTM.Account.MVC.UI.Models.Requests;
 using BTM.Account.MVC.UI.Models.Results;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Net.Http;
 using System.Security.Claims;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly IRequestFactory _httpRequest;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUserService _userService;
 
-        public AccountController(IRequestFactory httpRequestFactory, IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
+        public AccountController(
+                                 IHttpContextAccessor httpContextAccessor,
+                                 ITokenService tokenService,
+                                 IUserService userService) : base(tokenService)
         {
-            _httpRequest = httpRequestFactory;
-            _httpClientFactory = httpClientFactory;
+            _userService = userService;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var accessToken = await GetAccessTokenAsync();
             //get user's identity
-            string? id = User.FindFirstValue("sub");
+            string? userId = User.FindFirstValue(JwtClaimTypes.Subject);
 
-            if (string.IsNullOrEmpty(id) && string.IsNullOrEmpty(accessToken))
+            if (userId == null)
                 return View();
 
-            var response = await _httpRequest.GetRequestAsync($"api/users/{id}", null, accessToken ?? string.Empty);
+            Result<UserDTO> user = await _userService.GetUserAsync(userId, accessToken);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorResponse = JsonConvert.DeserializeObject<Result>(await response.Content.ReadAsStringAsync());
-                if (errorResponse != null)
-                {
-                    foreach (var error in errorResponse.ErrorMessages)
-                        ModelState.AddModelError(string.Empty, error);
-                }
+            if (!user.IsSuccess)
+                return View(new Result<UserDTO>());
 
-                return View(new UserDTO());
-            }
+            UserDTO userDTO = user.Data;
 
-            var user = JsonConvert.DeserializeObject<UserDTO>(await response.Content.ReadAsStringAsync());
-
-            return View(user);
+            return View(userDTO);
         }
 
         [HttpGet]
@@ -68,21 +61,16 @@ namespace BTM.Account.MVC.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterRequest model)
         {
-            var request = new UserRequestCommand(model.Email,model.Username,model.Password);
+            var request = new RegisterUserCommand(model.Email, model.Username, model.Password);
 
-            var response = await _httpRequest.SendPostRequestAsync("api/users", request, string.Empty);
+            var response = await _userService.RegisterUser("api/users", request, string.Empty);
 
-            if (!response.IsSuccessStatusCode)
+            if (response != null && !response.IsSuccess)
             {
-                var errorResponse = JsonConvert.DeserializeObject<Result>(await response.Content.ReadAsStringAsync());
+                foreach (var error in response.ErrorMessages)
+                    ModelState.AddModelError(string.Empty, error);
 
-                if (errorResponse != null)
-                {
-                    foreach (var error in errorResponse.ErrorMessages)
-                        ModelState.AddModelError(string.Empty, error);
-                }
-
-                return View(RegisterRequest.Reset()); 
+                return View(RegisterRequest.Reset());
             }
 
             return RedirectToAction("Login", "Account");

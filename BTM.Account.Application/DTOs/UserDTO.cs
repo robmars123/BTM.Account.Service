@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BTM.Account.MVC.UI.Models
+namespace BTM.Account.Application.DTOs
 {
     public class UserDTO
     {
@@ -9,8 +9,5 @@ namespace BTM.Account.MVC.UI.Models
 
         [Display(Name = "Username")]
         public string Username { get; init; }
-
-        [Display(Name = "Password")]
-        public string Password { get; init; }
     }
 }

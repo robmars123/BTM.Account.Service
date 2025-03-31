@@ -7,9 +7,11 @@
             //API project specific constants that are not to be
             //shared with the API project or other projects, go here.
             public const string Root = "api";
-            public const string BaseApiUrl = "https://localhost:7080";
 
             public const string AdminPanel = Root + "/" + "AdminPanel";
+
+            //API Names
+            public const string AccountAPI = "AccountAPI";
         }
         public static class Roles
         {

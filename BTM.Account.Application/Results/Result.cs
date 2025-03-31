@@ -1,4 +1,4 @@
-﻿namespace BTM.Account.Domain.Abstractions
+﻿namespace BTM.Account.Application.Results
 {
 
     public class Result
@@ -26,7 +26,7 @@
     public class Result<T>
     {
         public bool IsSuccess { get; set; }
-        public string? ErrorMessages { get; set; }
+        public string ErrorMessages { get; set; } = string.Empty;
         public T? Data { get; set; }
         public Result<T> SuccessResult(T data)
         {

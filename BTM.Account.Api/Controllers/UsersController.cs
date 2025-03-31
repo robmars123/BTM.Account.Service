@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using BTM.Account.Api.Models.In;
 using BTM.Account.Api.Models.Out;
+using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.GetUser;
 using BTM.Account.Application.Users.RegisterUser;
 using BTM.Account.Domain.Abstractions;
@@ -17,7 +18,6 @@ namespace BTM.Account.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -30,6 +30,7 @@ namespace BTM.Account.Api.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string id)
         {
             //validate if user is authenticated

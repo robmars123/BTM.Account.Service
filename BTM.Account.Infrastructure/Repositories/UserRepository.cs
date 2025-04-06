@@ -10,10 +10,12 @@ namespace BTM.Account.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILoggingService _loggingService;
 
-        public UserRepository(UserManager<ApplicationUser> userManager)
+        public UserRepository(UserManager<ApplicationUser> userManager, ILoggingService loggingService)
         {
             _userManager = userManager;
+            _loggingService = loggingService;
         }
 
         public async Task<Result<User>> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
@@ -50,6 +52,7 @@ namespace BTM.Account.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
+                _loggingService.LogError(ex.Message, ex);
                 return Result.FailureResult(ex.Message);
             }
         }

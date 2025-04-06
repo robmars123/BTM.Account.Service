@@ -13,6 +13,11 @@
             //API Names
             public const string AccountAPI = "AccountAPI";
         }
+
+        public static class ApiEndpoints
+        {
+            public const string UsersEndpoint = ApiConstants.Root + "/" + "users";
+        }
         public static class Roles
         {
             public const string Admin = "admin";

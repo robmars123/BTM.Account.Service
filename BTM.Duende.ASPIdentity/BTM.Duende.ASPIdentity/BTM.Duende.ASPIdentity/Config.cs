@@ -44,6 +44,8 @@ public static class Config
                     //BTM.Account.MVC.Client
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowOfflineAccess = true,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    AccessTokenLifetime = 120,
                     ClientId = "Account.MVC.Client",
                     AllowedGrantTypes = GrantTypes.Code,
                                         RedirectUris = new List<string>()
@@ -62,6 +64,7 @@ public static class Config
                         "AccountAPI.fullaccess",//clients should match these scopes
                         "AccountAPI.read",//clients should match these scopes
                         "AccountAPI.write",//clients should match these scopes
+                        "offline_access"
                     },
                     ClientSecrets =
                     {

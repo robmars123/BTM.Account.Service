@@ -1,5 +1,4 @@
 ﻿using BTM.Account.Application.Abstractions;
-using BTM.Account.Application.Factories.HttpRequest;
 using BTM.Account.Infrastructure.Models;
 using BTM.Account.Infrastructure.Repositories;
 using BTM.Account.Infrastructure.Services;
@@ -19,6 +18,8 @@ namespace BTM.Account.Infrastructure.Dependencies
             AddPersistence(services, configuration);
             RegisterServices(services);
             RegisterRepositories(services);
+            RegisterLogging(services);
+            RegisterCaching(services);
 
             return services;
         }
@@ -56,6 +57,22 @@ namespace BTM.Account.Infrastructure.Dependencies
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+        }
+
+        private static void RegisterLogging(IServiceCollection services)
+        {
+            services.AddSingleton<ILoggingService, LoggingService>();
+        }
+        private static void RegisterCaching(IServiceCollection services)
+        {
+            //// Register Redis cache service in the DI container (Redis is now available throughout the application)
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = redisConnectionString; // Connection string to Redis server
+            //    options.InstanceName = "cache";  // Cache name (optional, you can change it)
+            //});
+            //// Register Redis cache service
+            //services.AddSingleton<ICacheService, RedisCacheService>();
         }
     }
 }

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BTM.Account.Api\BTM.Account.Api.csproj" />
     <ProjectReference Include="..\BTM.Account.MVC.Client\BTM.Account.MVC.UI.csproj" />
+    <ProjectReference Include="..\BTM.Caching.Redis\BTM.Caching.Redis\BTM.Caching.Redis.csproj" />
     <ProjectReference Include="..\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity\BTM.Duende.ASPIdentity.csproj" />
   </ItemGroup>
 

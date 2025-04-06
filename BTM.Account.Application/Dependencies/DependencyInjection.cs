@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BTM.Account.Application.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BTM.Account.Application.Dependencies
 {

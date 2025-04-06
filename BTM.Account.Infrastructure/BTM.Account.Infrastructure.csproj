@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Duende.AccessTokenManagement" Version="3.2.0" />
+    <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
@@ -20,6 +23,9 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.3" />
     <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" />
   </ItemGroup>
 
@@ -27,6 +33,7 @@
     <ProjectReference Include="..\BTM.Account.Application\BTM.Account.Application.csproj" />
     <ProjectReference Include="..\BTM.Account.Domain\BTM.Account.Domain.csproj" />
     <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
+    <ProjectReference Include="..\BTM.Caching.Redis\BTM.Caching.Redis\BTM.Caching.Redis.csproj" />
   </ItemGroup>
 
   <ItemGroup>

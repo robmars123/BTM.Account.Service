@@ -1,13 +1,8 @@
-using BTM.Account.Application.Abstractions;
-using BTM.Account.Application.Factories.HttpRequest;
-using BTM.Account.Infrastructure.Dependencies;
-using BTM.Account.Infrastructure.Factories;
-using BTM.Account.Infrastructure.Services;
+using BTM.Account.MVC.UI.Dependencies;
 using BTM.Account.Shared.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.Net.Http.Headers;
 
@@ -21,8 +16,12 @@ public static class Program
         builder.AddServiceDefaults();
 
         // Add services to the container..
-        RegisterFactories(builder);
-        RegisterServices(builder);
+        builder.RegisterServices();
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration["RedisSettings:ConnectionString"]; // Connection string to Redis server
+            options.InstanceName = "BTMAccount.Cache"; // Optional instance name for the cache
+        });
 
         builder.Services.AddControllersWithViews()
                     .AddJsonOptions(configure => configure.JsonSerializerOptions.PropertyNamingPolicy = null);
@@ -116,17 +115,5 @@ public static class Program
             .WithStaticAssets();
 
         app.Run();
-    }
-
-    private static void RegisterFactories(WebApplicationBuilder builder)
-    {
-       // builder.Services.AddScoped<IRequestFactory, RequestFactory>();
-    }
-
-    private static void RegisterServices(WebApplicationBuilder builder)
-    {
-        builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IHttpRequestService, HttpRequestService>();
     }
 }

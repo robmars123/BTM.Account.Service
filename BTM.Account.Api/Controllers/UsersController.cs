@@ -1,16 +1,12 @@
-﻿using Azure.Core;
-using BTM.Account.Api.Models.In;
-using BTM.Account.Api.Models.Out;
+﻿using BTM.Account.Api.Models.In;
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.GetUser;
 using BTM.Account.Application.Users.RegisterUser;
-using BTM.Account.Domain.Abstractions;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,12 +17,10 @@ namespace BTM.Account.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IHttpClientFactory _httpClientFactory;
 
-        public UsersController(IMediator mediator, IHttpClientFactory httpClientFactory)
+        public UsersController(IMediator mediator)
         {
             _mediator = mediator;
-            _httpClientFactory = httpClientFactory;
         }
         // GET: api/<UsersController>
         [HttpGet("{id}")]

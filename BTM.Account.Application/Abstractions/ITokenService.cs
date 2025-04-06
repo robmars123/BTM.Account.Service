@@ -1,4 +1,6 @@
-﻿namespace BTM.Account.Application.Abstractions
+﻿using System.Net.Http;
+
+namespace BTM.Account.Application.Abstractions
 {
     public interface ITokenService
     {

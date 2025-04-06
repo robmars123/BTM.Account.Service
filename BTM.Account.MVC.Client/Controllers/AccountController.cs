@@ -8,12 +8,14 @@ using BTM.Account.MVC.UI.Controllers.Base;
 using BTM.Account.MVC.UI.Models.Commands;
 using BTM.Account.MVC.UI.Models.Requests;
 using BTM.Account.MVC.UI.Models.Results;
+using BTM.Account.Shared.Common;
 using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -24,8 +26,7 @@ namespace BTM.Account.MVC.Client.Controllers
     {
         private readonly IUserService _userService;
 
-        public AccountController(
-                                 IHttpContextAccessor httpContextAccessor,
+        public AccountController(IHttpContextAccessor httpContextAccessor,
                                  ITokenService tokenService,
                                  IUserService userService) : base(tokenService)
         {
@@ -35,6 +36,7 @@ namespace BTM.Account.MVC.Client.Controllers
         public async Task<IActionResult> Index()
         {
             var accessToken = await GetAccessTokenAsync();
+
             //get user's identity
             string? userId = User.FindFirstValue(JwtClaimTypes.Subject);
 
@@ -44,7 +46,7 @@ namespace BTM.Account.MVC.Client.Controllers
             Result<UserDTO> user = await _userService.GetUserAsync(userId, accessToken);
 
             if (!user.IsSuccess)
-                return View(new Result<UserDTO>());
+                return View();
 
             UserDTO userDTO = user.Data;
 
@@ -63,7 +65,7 @@ namespace BTM.Account.MVC.Client.Controllers
         {
             var request = new RegisterUserCommand(model.Email, model.Username, model.Password);
 
-            var response = await _userService.RegisterUser("api/users", request, string.Empty);
+            var response = await _userService.RegisterUser(GlobalConstants.ApiEndpoints.UsersEndpoint, request, string.Empty);
 
             if (response != null && !response.IsSuccess)
             {

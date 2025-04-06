@@ -17,6 +17,12 @@ public static class Program
         // Add services to the container.
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration["RedisSettings:ConnectionString"]; // Connection string to Redis server
+            options.InstanceName = "BTMAccount.Cache"; // Optional instance name for the cache
+        });
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
         builder.Services.AddSwaggerGen(options =>

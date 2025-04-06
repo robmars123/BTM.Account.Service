@@ -2,6 +2,8 @@
 using BTM.Account.Application.DTOs;
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.RegisterUser;
+using BTM.Account.Domain.Users;
+using BTM.Account.Shared.Common;
 using Newtonsoft.Json;
 
 namespace BTM.Account.Infrastructure.Services
@@ -9,24 +11,67 @@ namespace BTM.Account.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IHttpRequestService _httpRequestService;
+        private readonly ILoggingService _logger;
+        private readonly ICacheService _cacheService;
 
-        public UserService(IHttpRequestService httpRequestService)
+        public UserService(IHttpRequestService httpRequestService, ILoggingService logger, ICacheService cacheService)
         {
             _httpRequestService = httpRequestService;
+            _logger = logger;
+            _cacheService = cacheService;
         }
         public async Task<Result<UserDTO>> GetUserAsync(string? userId, string? accessToken)
         {
-            var response = await _httpRequestService.GetRequestAsync($"api/users/{userId}", null, accessToken ?? string.Empty);
+            var cacheKey = $"User_{userId}";
+            var cachedUser = await _cacheService.GetCacheValueAsync<User>(cacheKey);
 
-            if (!response.IsSuccessStatusCode)
+            //if cache is not null, return the cached user
+            if (cachedUser != null)
             {
-                var errorResponse = await DeserializeResultUserDTO(response);
-                return errorResponse != null
-                    ? new Result<UserDTO>().FailureResult(errorResponse.ErrorMessages)
-                    : new Result<UserDTO>();
+                return new Result<UserDTO>().SuccessResult(new UserDTO
+                {
+                    Email = cachedUser.Data?.Email,
+                    Username = cachedUser.Data?.Username
+                });
             }
 
-            UserDTO? result = await DeserializeResultObject<UserDTO>(response);
+            UserDTO? result = new UserDTO();
+            try
+            {
+                HttpResponseMessage response = await _httpRequestService.GetRequestAsync($"{GlobalConstants.ApiEndpoints.UsersEndpoint}/{userId}", null, accessToken ?? string.Empty);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorResponse = await DeserializeResultUserDTO(response);
+
+                    _logger.LogError($"Error occurred while getting user: {errorResponse?.ErrorMessages}");
+                    return errorResponse != null
+                        ? new Result<UserDTO>().FailureResult(errorResponse.ErrorMessages)
+                        : new Result<UserDTO>().FailureResult(response.StatusCode.ToString());
+                }
+
+                if (response != null)
+                {
+                    var user = DeserializeResultObject<User>(response);
+                    if (user != null)
+                    {
+                        result = new UserDTO
+                        {
+                            Email = user.Result.Email,
+                            Username = user.Result.Username
+                        };
+                        //set cache, setting the cache to expire in 10 minutes
+                        await _cacheService.SetCacheValueAsync(cacheKey, result);
+                    }
+                }
+
+
+                result = await DeserializeResultObject<UserDTO>(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
 
             return new Result<UserDTO>().SuccessResult(result ?? new UserDTO());
         }

@@ -8,8 +8,7 @@ trigger:
     include:
       - master  # Replace with the branch you want to monitor
 
-pool: 
-  vmImage: 'windows-latest'  # It's better to specify a default image
+pool: Default
 
 stages:
   - stage: Restore

@@ -40,7 +40,7 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          - script: dotnet test **/*Tests.csproj --configuration Release --no-build --collect:"Code Coverage"
+          - script: dotnet test BTM.Account.Api.sln --configuration Release --no-build --collect:"Code Coverage"
             displayName: 'Run tests'
 
   # - stage: Publish

@@ -18,7 +18,7 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '8.x'  # Use .NET 9.x or any other version you're targeting
+              version: '9.x'  # Use .NET 9.x or any other version you're targeting
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - checkout: self  # Ensure repository is checked out early

@@ -54,17 +54,18 @@ stages:
           #   workingDirectory: ./BTM.NUnit.Playwright
           #   displayName: 'Install Playwright Browsers'
 
-          - task: UseDotNet@2
+          - task: NodeTool@0
             inputs:
-              packageType: sdk
-              version: '9.0.x'
-            displayName: 'Use .NET SDK'
-          - script: dotnet build --configuration Release
-            displayName: 'Build'
-          - script: powershell bin/Release/net9.0/playwright.ps1 install --with-deps
+              versionSpec: '18'
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'npm ci'
+          - script: npx playwright install --with-deps
             displayName: 'Install Playwright browsers'
-          - script: dotnet test --configuration Release
-            displayName: 'Run tests'
+          - script: npx playwright test
+            displayName: 'Run Playwright tests'
+            env:
+              CI: 'true'
 
           # - task: VSTest@2
           #   inputs:

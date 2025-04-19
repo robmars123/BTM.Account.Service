@@ -50,7 +50,7 @@ stages:
               dotnet build "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj" --configuration Release -o "$(Build.ArtifactStagingDirectory)/testbin"
             displayName: 'Build test project'
           
-          - script: pwsh bin/Release/net6.0/playwright.ps1 install --with-deps
+          - script: powershell bin/Release/net9.0/playwright.ps1 install --with-deps
             workingDirectory: ./BTM.NUnit.Playwright
             displayName: 'Install Playwright Browsers'
 

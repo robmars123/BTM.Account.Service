@@ -40,31 +40,43 @@ stages:
     jobs:
       - job: TestJob
         steps:
+          # - task: UseDotNet@2
+          #   inputs:
+          #     packageType: 'sdk'
+          #     version: '9.0.x'  # or whatever you're using
+          #     installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          # - script: |
+          #     dotnet build "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj" --configuration Release -o "$(Build.ArtifactStagingDirectory)/testbin"
+          #   displayName: 'Build test project'
+          
+          # - script: powershell bin/Release/net9.0/playwright.ps1 install --with-deps
+          #   workingDirectory: ./BTM.NUnit.Playwright
+          #   displayName: 'Install Playwright Browsers'
+
           - task: UseDotNet@2
             inputs:
-              packageType: 'sdk'
-              version: '9.0.x'  # or whatever you're using
-              installationPath: $(Agent.ToolsDirectory)/dotnet
+              packageType: sdk
+              version: '9.0.x'
+            displayName: 'Use .NET SDK'
+          - script: dotnet build --configuration Release
+            displayName: 'Build'
+          - script: pwsh bin/Release/net8.0/playwright.ps1 install --with-deps
+            displayName: 'Install Playwright browsers'
+          - script: dotnet test --configuration Release
+            displayName: 'Run tests'
 
-          - script: |
-              dotnet build "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj" --configuration Release -o "$(Build.ArtifactStagingDirectory)/testbin"
-            displayName: 'Build test project'
-          
-          - script: powershell bin/Release/net9.0/playwright.ps1 install --with-deps
-            workingDirectory: ./BTM.NUnit.Playwright
-            displayName: 'Install Playwright Browsers'
-
-          - task: VSTest@2
-            inputs:
-              testSelector: 'testAssemblies'
-              testAssemblyVer2: |
-                **\BTM.NUnit.Playwright.Tests.dll
-              searchFolder: '$(Build.ArtifactStagingDirectory)/testbin'
-              platform: 'Any CPU'
-              configuration: 'Release'
-              runInParallel: true
-              codeCoverageEnabled: false
-              diagnosticsEnabled: true
+          # - task: VSTest@2
+          #   inputs:
+          #     testSelector: 'testAssemblies'
+          #     testAssemblyVer2: |
+          #       **\BTM.NUnit.Playwright.Tests.dll
+          #     searchFolder: '$(Build.ArtifactStagingDirectory)/testbin'
+          #     platform: 'Any CPU'
+          #     configuration: 'Release'
+          #     runInParallel: true
+          #     codeCoverageEnabled: false
+          #     diagnosticsEnabled: true
 
   # - stage: Publish
   #   dependsOn: Test

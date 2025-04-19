@@ -33,9 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.Caching.Redis", "BTM.Ca
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BTM.Tests", "BTM.Tests", "{9904462D-58FD-4D6E-BAB9-7B8BFA15F439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.MSTest.Playwright", "BTM.MSTest.Playwright\BTM.MSTest.Playwright.csproj", "{09CE7F6A-CA0B-486C-B529-946FAE5A18B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.MSTest.Playwright.Tests", "BTM.MSTest.Playwright\BTM.MSTest.Playwright.Tests.csproj", "{09CE7F6A-CA0B-486C-B529-946FAE5A18B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.NUnit.Playwright", "BTM.NUnit.Playwright\BTM.NUnit.Playwright.csproj", "{132C7E18-AD4C-4EFB-9289-7A2E62765B1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.NUnit.Playwright.Tests", "BTM.NUnit.Playwright\BTM.NUnit.Playwright.Tests.csproj", "{132C7E18-AD4C-4EFB-9289-7A2E62765B1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

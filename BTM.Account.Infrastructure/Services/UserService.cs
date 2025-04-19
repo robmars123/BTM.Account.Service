@@ -87,12 +87,18 @@ namespace BTM.Account.Infrastructure.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await DeserializeResultObject<Result>(response);
+
+                if (errorResponse == null)
+                {
+                    return Result.FailureResult("An unexpected error occurred while processing the request.");
+                }
+
                 return errorResponse != null
                     ? Result.FailureResult(errorResponse.ErrorMessages)
-                    : new Result();
+                    : Result.FailureResult("An unexpected error occurred.");
             }
             var registerResult = await DeserializeResultObject<Result>(response);
-            return registerResult;
+            return registerResult ?? Result.FailureResult("No result returned from the server.");
         }
 
         private static async Task<T?> DeserializeResultObject<T>(HttpResponseMessage response)

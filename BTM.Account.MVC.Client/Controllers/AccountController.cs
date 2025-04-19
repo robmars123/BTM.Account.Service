@@ -1,11 +1,9 @@
 ﻿using BTM.Account.Application.Abstractions;
 using BTM.Account.Application.DTOs;
-using BTM.Account.Application.Factories.HttpRequest;
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.RegisterUser;
 using BTM.Account.Infrastructure.Services;
 using BTM.Account.MVC.UI.Controllers.Base;
-using BTM.Account.MVC.UI.Models.Commands;
 using BTM.Account.MVC.UI.Models.Requests;
 using BTM.Account.MVC.UI.Models.Results;
 using BTM.Account.Shared.Common;
@@ -15,8 +13,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -67,7 +63,7 @@ namespace BTM.Account.MVC.Client.Controllers
 
             var response = await _userService.RegisterUser(GlobalConstants.ApiEndpoints.UsersEndpoint, request, string.Empty);
 
-            if (response != null && !response.IsSuccess)
+            if (!response.IsSuccess)
             {
                 foreach (var error in response.ErrorMessages)
                     ModelState.AddModelError(string.Empty, error);

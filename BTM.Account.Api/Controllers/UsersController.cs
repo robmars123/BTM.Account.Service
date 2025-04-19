@@ -37,6 +37,7 @@ namespace BTM.Account.Api.Controllers
 
             var query = new GetUserQuery(Guid.Parse(id.ToString()));
 
+            //todo: refactor without using MediatR
             var result = await _mediator.Send(query);
 
             //validate if result is successful

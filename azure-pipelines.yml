@@ -40,17 +40,29 @@ stages:
     jobs:
       - job: TestJob
         steps:
-        - task: VSTest@2
-          inputs:
-            testSelector: 'testAssemblies'
-            testAssemblyVer2: |
-              **\BTM.NUnit.Playwright.Tests.dll
-            searchFolder: '$(System.DefaultWorkingDirectory)'
-            platform: 'Any CPU'
-            configuration: 'Release'
-            runInParallel: true
-            codeCoverageEnabled: false
-            diagnosticsEnabled: true
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '9.0.x'  # or whatever you're using
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - script: dotnet restore ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj
+            displayName: 'Restore test project'
+
+          - script: dotnet build ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)/testbin
+            displayName: 'Build test project'
+
+          - task: VSTest@2
+            inputs:
+              testSelector: 'testAssemblies'
+              testAssemblyVer2: |
+                **\BTM.NUnit.Playwright.Tests.dll
+              searchFolder: '$(Build.ArtifactStagingDirectory)/testbin'
+              platform: 'Any CPU'
+              configuration: 'Release'
+              runInParallel: true
+              codeCoverageEnabled: false
+              diagnosticsEnabled: true
 
   # - stage: Publish
   #   dependsOn: Test

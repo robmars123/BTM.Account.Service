@@ -40,7 +40,7 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          - script: dotnet test BTM.NUnit.Playwright\BTM.NUnit.Playwright.Tests.csproj --configuration Release --no-build --list-tests
+          - script: dotnet test .\BTM.NUnit.Playwright\BTM.NUnit.Playwright.Tests.csproj --configuration Release --no-build --list-tests
             displayName: 'Run tests'
 
   # - stage: Publish

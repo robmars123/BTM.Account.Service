@@ -8,7 +8,8 @@ trigger:
     include:
       - master  # Replace with the branch you want to monitor
 
-pool: Default
+pool: 
+  vmImage: 'windows-latest'  # It's better to specify a default image
 
 stages:
   - stage: Restore
@@ -18,10 +19,10 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '9.x'
+              version: '8.x'  # Use .NET 8.x or any other version you're targeting
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - checkout: self
+          - checkout: self  # Ensure repository is checked out early
             clean: true
 
           - script: dotnet restore
@@ -40,8 +41,11 @@ stages:
     jobs:
       - job: TestJob
         steps:
+          - script: dotnet restore ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj  # Explicitly restore test project
+            displayName: 'Restore test project dependencies'
+
           - script: dotnet test ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj --configuration Release --no-build --list-tests
-            displayName: 'Run tests'
+            displayName: 'List test methods'
 
   # - stage: Publish
   #   dependsOn: Test

@@ -54,18 +54,52 @@ stages:
           #   workingDirectory: ./BTM.NUnit.Playwright
           #   displayName: 'Install Playwright Browsers'
 
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '18'
-            displayName: 'Install Node.js'
-          - script: npm ci
-            displayName: 'npm ci'
-          - script: npx playwright install --with-deps
-            displayName: 'Install Playwright browsers'
-          - script: npx playwright test
-            displayName: 'Run Playwright tests'
-            env:
-              CI: 'true'
+    # Step 1: Install .NET SDK
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '9.0.x'
+          displayName: 'Install .NET SDK'
+
+        # Step 2: Restore .NET project
+        - script: dotnet restore ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj
+          displayName: 'Restore .NET dependencies'
+
+        # Step 3: Build .NET project
+        - script: dotnet build ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj --configuration Release
+          displayName: 'Build .NET Test Project'
+
+        # Step 4: Install Node.js (for Playwright)
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '18'
+          displayName: 'Install Node.js'
+
+        # Step 5: Install npm dependencies (including Playwright)
+        - script: npm install
+          displayName: 'Install npm dependencies'
+
+        # Step 6: Install Playwright browsers
+        - script: npx playwright install --with-deps
+          displayName: 'Install Playwright Browsers'
+
+        # Step 7: Run NUnit tests
+        - task: VSTest@2
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: '**\BTM.NUnit.Playwright.Tests.dll'
+            searchFolder: '$(System.DefaultWorkingDirectory)'
+            platform: 'Any CPU'
+            configuration: 'Release'
+            runInParallel: true
+            diagnosticsEnabled: true
+          displayName: 'Run NUnit Tests'
+
+        # Step 8: Run Playwright tests (optional, for E2E/UI testing)
+        - script: npx playwright test
+          displayName: 'Run Playwright Tests'
+          env:
+            CI: 'true'
 
           # - task: VSTest@2
           #   inputs:

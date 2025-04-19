@@ -46,9 +46,6 @@ stages:
               version: '9.0.x'  # or whatever you're using
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - script: dotnet restore ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj
-            displayName: 'Restore test project'
-
           - script: dotnet build ./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)/testbin
             displayName: 'Build test project'
 

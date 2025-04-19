@@ -40,24 +40,17 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'  # Replace with your actual artifact name if different
-              downloadPath: '$(System.ArtifactsDirectory)'
-
-          - task: VSTest@2
-            inputs:
-              testSelector: 'testAssemblies'
-              testAssemblyVer2: |
-                **\BTM.NUnit.Playwright.Tests.dll
-              searchFolder: '$(System.ArtifactsDirectory)'
-              platform: '$(buildPlatform)'         # Set in pipeline variables (e.g., 'Any CPU')
-              configuration: '$(buildConfiguration)' # Set in pipeline variables (e.g., 'Release')
-              runInParallel: true
-              codeCoverageEnabled: false
-              diagnosticsEnabled: true
+        - task: VSTest@2
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: |
+              **\BTM.NUnit.Playwright.Tests.dll
+            searchFolder: '$(System.DefaultWorkingDirectory)'
+            platform: 'Any CPU'
+            configuration: 'Release'
+            runInParallel: true
+            codeCoverageEnabled: false
+            diagnosticsEnabled: true
 
   # - stage: Publish
   #   dependsOn: Test

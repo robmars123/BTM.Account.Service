@@ -18,10 +18,10 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '9.x'
+              version: '9.x'  # Use .NET 9.x or any other version you're targeting
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - checkout: self
+          - checkout: self  # Ensure repository is checked out early
             clean: true
 
           - script: dotnet restore
@@ -40,8 +40,69 @@ stages:
     jobs:
       - job: TestJob
         steps:
-          - script: dotnet test **/*Tests.csproj --configuration Release --no-build --collect:"Code Coverage"
-            displayName: 'Run tests'
+          # - task: UseDotNet@2
+          #   inputs:
+          #     packageType: 'sdk'
+          #     version: '9.0.x'  # or whatever you're using
+          #     installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          # - script: |
+          #     dotnet build "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj" --configuration Release -o "$(Build.ArtifactStagingDirectory)/testbin"
+          #   displayName: 'Build test project'
+          
+          # - script: powershell bin/Release/net9.0/playwright.ps1 install --with-deps
+          #   workingDirectory: ./BTM.NUnit.Playwright
+          #   displayName: 'Install Playwright Browsers'
+
+    # Step 1: Install .NET SDK
+        - task: UseDotNet@2
+          displayName: 'Install .NET'
+          inputs:
+            packageType: 'sdk'
+            version: '9.0.x'
+        - task: DotNetCoreCLI@2
+          displayName: New Manifest for tool
+          inputs:
+            command: custom
+            custom: 'new '
+            arguments: tool-manifest
+        - task: DotNetCoreCLI@2
+          displayName: Install Playwright CLI
+          inputs:
+            command: custom
+            custom: 'tool '
+            arguments: install Microsoft.Playwright.CLI
+        - task: DotNetCoreCLI@2
+          displayName: 'Build test project'
+          inputs:
+            command: 'build'
+            projects: "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj"
+        - task: DotNetCoreCLI@2
+          displayName: Run Playwright Install
+          inputs:
+            command: custom
+            custom: 'tool '
+            arguments: run playwright install
+        - task: DotNetCoreCLI@2
+          displayName: 'Run tests'
+          inputs:
+            command: 'test'
+            projects: "./BTM.NUnit.Playwright/BTM.NUnit.Playwright.Tests.csproj"
+            arguments: '-e BROWSER=chromium'
+            testRunTitle: 'Chrome results'
+            buildProperties: 
+
+          # - task: VSTest@2
+          #   inputs:
+          #     testSelector: 'testAssemblies'
+          #     testAssemblyVer2: |
+          #       **\BTM.NUnit.Playwright.Tests.dll
+          #     searchFolder: '$(Build.ArtifactStagingDirectory)/testbin'
+          #     platform: 'Any CPU'
+          #     configuration: 'Release'
+          #     runInParallel: true
+          #     codeCoverageEnabled: false
+          #     diagnosticsEnabled: true
 
   # - stage: Publish
   #   dependsOn: Test

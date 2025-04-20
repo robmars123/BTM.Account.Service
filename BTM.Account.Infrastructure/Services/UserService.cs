@@ -97,8 +97,8 @@ namespace BTM.Account.Infrastructure.Services
                     ? Result.FailureResult(errorResponse.ErrorMessages)
                     : Result.FailureResult("An unexpected error occurred.");
             }
-            var registerResult = await DeserializeResultObject<Result>(response);
-            return registerResult ?? Result.FailureResult("No result returned from the server.");
+
+            return Result.SuccessResult("Successfully registered.");
         }
 
         private static async Task<T?> DeserializeResultObject<T>(HttpResponseMessage response)

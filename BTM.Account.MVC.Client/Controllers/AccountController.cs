@@ -68,9 +68,10 @@ namespace BTM.Account.MVC.Client.Controllers
                 foreach (var error in response.ErrorMessages)
                     ModelState.AddModelError(string.Empty, error);
 
-                return View(RegisterRequest.Reset());
+                return View();
             }
 
+            RegisterRequest.Reset();
             return RedirectToAction("Login", "Account");
         }
 

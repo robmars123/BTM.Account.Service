@@ -85,18 +85,14 @@ namespace BTM.Account.MVC.Client.Controllers
         }
 
         [Authorize]
-        public async Task Logout()
+        public async Task<IActionResult> Logout()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Clears the  local cookie
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Redirects to the IDP linked to scheme
-            // "OpenIdConnectDefaults.AuthenticationScheme" (oidc)
-            // so it can clear its own session/cookie
-            await HttpContext.SignOutAsync(
-                OpenIdConnectDefaults.AuthenticationScheme);
+            return SignOut(new AuthenticationProperties
+            {
+                RedirectUri = "/",
+            }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         public IActionResult AccessDenied()

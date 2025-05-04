@@ -20,17 +20,17 @@ namespace BTM.Account.Application.Users.GetUser
         }
         public async Task<Result<GetUserResponse>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            Result<User> response = await _userRepository.GetUserByIdAsync(request.Id.ToString(), cancellationToken);
+            User response = await _userRepository.GetUserByIdAsync(request.Id.ToString(), cancellationToken);
 
-            if (!response.IsSuccess || response.Data == null)
+            if (response == null)
                 return new Result<GetUserResponse>().FailureResult("No user found.");
 
             //Make a mapping
             var userResponse = new GetUserResponse
             {
-                Id = response.Data.Id,
-                Email = response.Data.Email,
-                Username = response.Data.Username
+                Id = response.Id,
+                Email = response.Email,
+                Username = response.Username
             };
 
             return new Result<GetUserResponse>().SuccessResult(userResponse);

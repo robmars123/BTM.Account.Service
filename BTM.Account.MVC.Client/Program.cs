@@ -1,3 +1,4 @@
+﻿using BTM.Account.Infrastructure.Dependencies;
 using BTM.Account.MVC.UI.Dependencies;
 using BTM.Account.Shared.Common;
 using Microsoft.AspNetCore.Authentication;
@@ -15,8 +16,9 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
 
-        // Add services to the container..
-        builder.RegisterServices();
+    // Add services to the container..
+    builder.RegisterServices();
+
         builder.Services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = builder.Configuration["RedisSettings:ConnectionString"]; // Connection string to Redis server

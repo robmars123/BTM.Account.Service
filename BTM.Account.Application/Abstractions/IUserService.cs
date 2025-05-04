@@ -2,7 +2,7 @@
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.RegisterUser;
 
-namespace BTM.Account.Infrastructure.Services
+namespace BTM.Account.Application.Abstractions
 {
     public interface IUserService
     {

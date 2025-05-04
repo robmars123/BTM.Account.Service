@@ -24,6 +24,6 @@ namespace BTM.Account.Application.Dependencies
             {
                 configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
-        }
+    }
     }
 }

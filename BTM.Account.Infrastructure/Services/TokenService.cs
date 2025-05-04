@@ -16,7 +16,7 @@ namespace BTM.Account.Infrastructure.Services
 
         public async Task<string> GetAccessTokenAsync()
         {
-            return await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            return await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
         }
     }
 }

@@ -37,6 +37,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.MSTest.Playwright.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTM.NUnit.Playwright.Tests", "BTM.NUnit.Playwright\BTM.NUnit.Playwright.Tests.csproj", "{132C7E18-AD4C-4EFB-9289-7A2E62765B1D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{408698BA-8D7C-4880-B744-1F3E67BBAEFD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +118,7 @@ Global
 		{9904462D-58FD-4D6E-BAB9-7B8BFA15F439} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{09CE7F6A-CA0B-486C-B529-946FAE5A18B8} = {9904462D-58FD-4D6E-BAB9-7B8BFA15F439}
 		{132C7E18-AD4C-4EFB-9289-7A2E62765B1D} = {9904462D-58FD-4D6E-BAB9-7B8BFA15F439}
+		{408698BA-8D7C-4880-B744-1F3E67BBAEFD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F422FA2B-0245-4BEA-94A0-F46E9DEA7DCD}

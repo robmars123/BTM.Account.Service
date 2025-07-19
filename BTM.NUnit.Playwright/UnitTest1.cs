@@ -7,7 +7,8 @@ namespace BTM.NUnit.Playwright
     public class Tests : PageTest
     {
         [Test]
-        public async Task HomepageHasCorrectContent()
+    [Ignore("This test is ignored because it requires a running instance of the application.")]
+    public async Task HomepageHasCorrectContent()
         {
             await Page.GotoAsync("https://localhost:7282/");
 
@@ -20,7 +21,8 @@ namespace BTM.NUnit.Playwright
         }
 
         [Test]
-        public async Task LoginProcessWithUserAdmin()
+    [Ignore("This test is ignored because it requires a running instance of the application.")]
+    public async Task LoginProcessWithUserAdmin()
         {
             await Page.GotoAsync("https://localhost:7282/");
 

@@ -22,10 +22,4 @@
     <ProjectReference Include="..\BTM.Caching.Redis\BTM.Caching.Redis\BTM.Caching.Redis.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="BTM.Products.Api">
-      <HintPath>..\..\BTM.Products.Service\src\BTM.Products.Api\bin\Debug\net9.0\BTM.Products.Api.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

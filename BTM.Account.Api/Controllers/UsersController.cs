@@ -3,7 +3,6 @@ using BTM.Account.Api.Models.In;
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.GetUser;
 using BTM.Account.Application.Users.RegisterUser;
-using Duende.IdentityServer.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

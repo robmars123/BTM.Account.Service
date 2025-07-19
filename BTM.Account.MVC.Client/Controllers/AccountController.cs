@@ -1,9 +1,9 @@
-﻿using BTM.Account.Application.Abstractions;
+﻿using System.Diagnostics;
+using System.Security.Claims;
+using BTM.Account.Application.Abstractions;
 using BTM.Account.Application.DTOs;
 using BTM.Account.Application.Results;
 using BTM.Account.Application.Users.RegisterUser;
-using BTM.Account.Infrastructure.Models;
-using BTM.Account.Infrastructure.Services;
 using BTM.Account.MVC.UI.Controllers.Base;
 using BTM.Account.MVC.UI.Models.Requests;
 using BTM.Account.MVC.UI.Models.Results;
@@ -13,11 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Versioning;
-using System.Diagnostics;
-using System.Security.Claims;
 
 namespace BTM.Account.MVC.Client.Controllers
 {

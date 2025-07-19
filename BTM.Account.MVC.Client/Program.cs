@@ -70,8 +70,7 @@ public static class Program
       options.ClaimActions.DeleteClaim("idp");
 
       //Add scopes for API
-      options.Scope.Add("AccountAPI.read");
-      options.Scope.Add("AccountAPI.write");
+      options.Scope.Add("AccountAPI.fullaccess");
 
       options.TokenValidationParameters = new()
       {

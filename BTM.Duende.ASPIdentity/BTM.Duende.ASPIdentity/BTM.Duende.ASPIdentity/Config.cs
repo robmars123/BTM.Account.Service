@@ -5,36 +5,36 @@ namespace BTM.IdentityServer.BTM.Duende.ASPIdentity;
 
 public static class Config
 {
-    public static IEnumerable<IdentityResource> IdentityResources =>
-        new IdentityResource[]
-        {
+  public static IEnumerable<IdentityResource> IdentityResources =>
+      new IdentityResource[]
+      {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-        };
+      };
 
-    public static IEnumerable<ApiResource> ApiResources =>
- new ApiResource[]
-     {
-             new ApiResource("AccountAPI",
-                 "BTM Account API",
-                 new [] { "role" })
+  public static IEnumerable<ApiResource> ApiResources =>
+new ApiResource[]
+   {
+             new ApiResource("AccountAPI", "BTM Account API", new [] { "role" })
              {
-                 Scopes = { "AccountAPI.fullaccess",
-                     "AccountAPI.read",
-                     "AccountAPI.write"},
-                ApiSecrets = { new Secret("mysecret".Sha256()) }
+                 Scopes = { "AccountAPI.fullaccess"},
+                 ApiSecrets = { new Secret("mysecret".Sha256()) }
+             },
+             new ApiResource("ProductsAPI", "BTM Products API", new [] { "role" })
+             {
+                 Scopes = { "ProductsAPI.fullaccess"},
+                 ApiSecrets = { new Secret("mysecret".Sha256()) }
              }
-     };
+   };
 
-    public static IEnumerable<ApiScope> ApiScopes =>
-    new ApiScope[]
-        {
+  public static IEnumerable<ApiScope> ApiScopes =>
+  new ApiScope[]
+      {
                 //clients should match these scopes
                 new ApiScope("AccountAPI.fullaccess"),
-                new ApiScope("AccountAPI.read"),
-                new ApiScope("AccountAPI.write")};
+                new ApiScope("ProductsAPI.fullaccess")};
 
-    public static IEnumerable<Client> Clients =>
+  public static IEnumerable<Client> Clients =>
         new Client[]
         {
             new Client()
@@ -62,8 +62,6 @@ public static class Config
                         IdentityServerConstants.StandardScopes.Profile,
                         "roles",
                         "AccountAPI.fullaccess",//clients should match these scopes
-                        "AccountAPI.read",//clients should match these scopes
-                        "AccountAPI.write",//clients should match these scopes
                         "offline_access"
                     },
                     ClientSecrets =
@@ -76,7 +74,7 @@ public static class Config
                 ClientId = "swagger",
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials, // or AuthorizationCode, ClientCredentials, etc.
                 ClientSecrets = { new Secret("secret".Sha256()) },
-                AllowedScopes = { "AccountAPI.fullaccess" }
+                AllowedScopes = { "AccountAPI.fullaccess", "ProductsAPI.fullaccess" }
             }
         };
 }

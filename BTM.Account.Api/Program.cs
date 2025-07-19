@@ -1,4 +1,4 @@
-using BTM.Account.Application.Dependencies;
+﻿using BTM.Account.Application.Dependencies;
 using BTM.Account.Infrastructure.Dependencies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -30,7 +30,7 @@ public static class Program
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
+                Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,

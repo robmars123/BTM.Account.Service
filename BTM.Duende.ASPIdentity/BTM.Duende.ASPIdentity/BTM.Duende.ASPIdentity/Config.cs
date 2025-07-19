@@ -19,7 +19,7 @@ public static class Config
                  "BTM Account API",
                  new [] { "role" })
              {
-                 Scopes = { "AccountApi.fullaccess",
+                 Scopes = { "AccountAPI.fullaccess",
                      "AccountAPI.read",
                      "AccountAPI.write"},
                 ApiSecrets = { new Secret("mysecret".Sha256()) }
@@ -70,6 +70,13 @@ public static class Config
                     {
                         new Secret("mysecret".Sha256())
                     },
+            },
+            new Client
+            {
+                ClientId = "swagger",
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials, // or AuthorizationCode, ClientCredentials, etc.
+                ClientSecrets = { new Secret("secret".Sha256()) },
+                AllowedScopes = { "AccountAPI.fullaccess" }
             }
         };
 }

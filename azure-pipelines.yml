@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - master  # Replace with the branch you want to monitor
+      - master  # Replace or add branches you want to monitor, e.g. main
 
 pool: Default
 
@@ -13,31 +13,35 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: 'sdk'
-              version: '9.x'  # Use .NET 9.x or any other version you're targeting
+              version: '9.x'  # Use .NET 9.x or your target version
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - checkout: self  # Ensure repository is checked out early
+          - checkout: self
             clean: true
 
-          - script: dotnet restore
+          - script: dotnet restore BTM.IdentityServer/BTM.Duende.ASPIdentity/BTM.Duende.ASPIdentity.csproj
             displayName: 'Restore dependencies'
+            workingDirectory: BTM.IdentityServer/BTM.Duende.ASPIdentity
 
   - stage: Build
-    dependsOn: Restore  # This makes Build depend on the Restore stage
+    dependsOn: Restore
     jobs:
       - job: BuildJob
         steps:
-          - script: dotnet build --configuration Release
+          - script: dotnet build BTM.IdentityServer/BTM.Duende.ASPIdentity/BTM.Duende.ASPIdentity.csproj --configuration Release
             displayName: 'Build project'
+            workingDirectory: BTM.IdentityServer/BTM.Duende.ASPIdentity
 
   - stage: Test
     dependsOn: Build
     jobs:
       - job: TestJob
         steps:
-    # Step 1: Install .NET SDK
-        - task: UseDotNet@2
-          displayName: 'Install .NET'
-          inputs:
-            packageType: 'sdk'
-            version: '9.0.x'
+          - task: UseDotNet@2
+            displayName: 'Install .NET SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '9.x'  # Keep consistent with restore/build
+
+          # Add your test commands below, e.g.:
+          # - script: dotnet test ...

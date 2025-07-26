@@ -29,8 +29,15 @@ namespace BTM.Account.Infrastructure.Dependencies
     {
       services.AddDbContext<ApplicationDbContext>(options =>
       {
-        options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("BTM.Account.Infrastructure"));
+        options.UseSqlServer(
+            configuration.GetConnectionString("DefaultConnection"),
+            sqlOptions =>
+            {
+              sqlOptions.MigrationsAssembly("BTM.Account.Infrastructure");
+              sqlOptions.EnableRetryOnFailure();  // Enables transient failure retry
+            });
       });
+
 
       services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

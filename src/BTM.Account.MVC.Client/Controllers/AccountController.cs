@@ -74,13 +74,16 @@ namespace BTM.Account.MVC.Client.Controllers
       return RedirectToAction("Login", "Account");
     }
 
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login(string returnUrl = "/")
     {
-      // Optionally, clear the local session (cookie) first
       await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-      // Redirect to Duende Identity Server login page via OpenID Connect flow
-      return Challenge(new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
+      var redirectUri = Url.IsLocalUrl(returnUrl) ? returnUrl : "/";
+
+      return Challenge(new AuthenticationProperties
+      {
+        RedirectUri = redirectUri
+      }, OpenIdConnectDefaults.AuthenticationScheme);
     }
 
     [Authorize]

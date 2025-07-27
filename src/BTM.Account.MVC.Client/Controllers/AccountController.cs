@@ -33,7 +33,7 @@ namespace BTM.Account.MVC.Client.Controllers
       var accessToken = await GetAccessTokenAsync();
 
       //get user's identity
-      string? userId = User.FindFirstValue(JwtClaimTypes.Subject);
+      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
       if (userId == null)
         return View();

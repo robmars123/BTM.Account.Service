@@ -11,21 +11,28 @@ namespace BTM.Account.MVC.UI.Dependencies
 {
   public static class Dependencies
   {
-    public static void RegisterServices(this WebApplicationBuilder builder)
+    public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
-      builder.Services.AddScoped<ITokenService, TokenService>();
-      builder.Services.AddScoped<IUserService, UserService>();
-      builder.Services.AddScoped<IHttpRequestService, HttpRequestService>();
-      builder.Services.AddSingleton<ILoggingService, LoggingService>();
-      builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+      services.AddScoped<ITokenService, TokenService>();
+      services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IHttpRequestService, HttpRequestService>();
+      services.AddSingleton<ILoggingService, LoggingService>();
+      services.AddSingleton<ICacheService, RedisCacheService>();
 
-      //builder.Services.AddInfrastructure(builder.Configuration);
+      AddMvcControllers(services);
+      return services;
+    }
 
-      //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-      //{
-      //  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("BTM.Account.Infrastructure"));
-      //});
-
+    private static void AddMvcControllers(IServiceCollection services)
+    {
+      // Add controllers with views and configure JSON options
+      // This is necessary to ensure that the JSON serialization does not use camelCase naming policy
+      // which is the default in .NET 6 and later.
+      services.AddControllersWithViews()
+              .AddJsonOptions(options =>
+              {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null; // Use original property names
+              });
     }
   }
 }

@@ -3,10 +3,15 @@ using BTM.Account.Application.Abstractions.UserIdentityManager;
 using BTM.Account.Infrastructure.Models;
 using BTM.Account.Infrastructure.Repositories;
 using BTM.Account.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace BTM.Account.Infrastructure.Dependencies
 {
@@ -22,9 +27,15 @@ namespace BTM.Account.Infrastructure.Dependencies
       RegisterLogging(services);
       RegisterCaching(services);
 
+      AddJsonWebTokenHandler();
       return services;
     }
 
+
+    private static void AddJsonWebTokenHandler()
+    {
+      JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+    }
     private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
     {
       services.AddDbContext<ApplicationDbContext>(options =>

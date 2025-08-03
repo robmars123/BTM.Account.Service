@@ -13,6 +13,8 @@ namespace BTM.Account.Infrastructure.Services
     private readonly IHttpRequestService _httpRequestService;
     private readonly ILoggingService _logger;
     private readonly ICacheService _cacheService;
+    private const string context = GlobalConstants.ApiConstants.AccountAPI;
+    private const string endpoint = GlobalConstants.ApiEndpoints.UsersEndpoint;
 
     public UserService(IHttpRequestService httpRequestService, ILoggingService logger, ICacheService cacheService)
     {
@@ -38,7 +40,8 @@ namespace BTM.Account.Infrastructure.Services
       UserDTO? result = new UserDTO();
       try
       {
-        HttpResponseMessage response = await _httpRequestService.GetRequestAsync($"{GlobalConstants.ApiEndpoints.UsersEndpoint}/{userId}", null, accessToken ?? string.Empty);
+        string endpointString = $"{endpoint}/{userId}";
+        HttpResponseMessage response = await _httpRequestService.GetRequestAsync(context, endpointString, null, accessToken ?? string.Empty);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -52,7 +55,7 @@ namespace BTM.Account.Infrastructure.Services
 
         if (response != null)
         {
-          var user = DeserializeResultObject<User>(response);
+          var user = DeserializeResultObjectAsync<User>(response);
           if (user != null)
           {
             result = new UserDTO
@@ -66,7 +69,7 @@ namespace BTM.Account.Infrastructure.Services
         }
 
 
-        result = await DeserializeResultObject<UserDTO>(response);
+        result = await DeserializeResultObjectAsync<UserDTO>(response);
       }
       catch (Exception ex)
       {
@@ -83,10 +86,10 @@ namespace BTM.Account.Infrastructure.Services
 
     public async Task<Result> RegisterUser(string endpoint, RegisterUserCommand user, string? accessToken)
     {
-      var response = await _httpRequestService.SendPostRequestAsync(endpoint, user, accessToken ?? string.Empty);
+      var response = await _httpRequestService.SendPostRequestAsync(context, endpoint, user, accessToken ?? string.Empty);
       if (!response.IsSuccessStatusCode)
       {
-        var errorResponse = await DeserializeResultObject<Result>(response);
+        var errorResponse = await DeserializeResultObjectAsync<Result>(response);
 
         if (errorResponse == null)
         {
@@ -101,7 +104,7 @@ namespace BTM.Account.Infrastructure.Services
       return Result.SuccessResult("Successfully registered.");
     }
 
-    private static async Task<T?> DeserializeResultObject<T>(HttpResponseMessage response)
+    private static async Task<T?> DeserializeResultObjectAsync<T>(HttpResponseMessage response)
     {
       return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
     }

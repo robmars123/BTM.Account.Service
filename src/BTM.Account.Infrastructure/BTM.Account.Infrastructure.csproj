@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Factories\**" />
+    <Compile Remove="Mappings\**" />
+    <EmbeddedResource Remove="Factories\**" />
+    <EmbeddedResource Remove="Mappings\**" />
+    <None Remove="Factories\**" />
+    <None Remove="Mappings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Duende.AccessTokenManagement" Version="3.2.0" />
     <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
@@ -38,8 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\" />
-    <Folder Include="Mappings\Abstractions\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

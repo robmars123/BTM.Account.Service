@@ -12,12 +12,14 @@
 
             //API Names
             public const string AccountAPI = "AccountAPI";
-        }
+            public const string ProductsAPI = "ProductsAPI";
+    }
 
         public static class ApiEndpoints
         {
             public const string UsersEndpoint = ApiConstants.Root + "/" + "users";
-        }
+            public const string ProductsEndpoint = ApiConstants.Root + "/" + "products";
+    }
         public static class Roles
         {
             public const string Admin = "admin";

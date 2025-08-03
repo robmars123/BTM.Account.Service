@@ -14,6 +14,13 @@ public static class HttpClientExtensions
       client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
     }).AddUserAccessTokenHandler();
 
+    services.AddHttpClient("ProductsAPI", client =>
+    {
+      client.BaseAddress = new Uri(configuration["ProductsAPI"]);
+      client.DefaultRequestHeaders.Clear();
+      client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+    }).AddUserAccessTokenHandler(); // Add if this API requires auth token
+
     services.AddHttpClient("IDPClient", client =>
     {
       client.BaseAddress = new Uri(configuration["Authentication:Authority"]);

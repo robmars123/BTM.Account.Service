@@ -51,6 +51,7 @@ public static class Authentication
     options.ClaimActions.DeleteClaim("idp");
 
     options.Scope.Add("AccountAPI.fullaccess");
+    options.Scope.Add("ProductsAPI.fullaccess");
     options.Scope.Add("offline_access");
 
     options.TokenValidationParameters = new()

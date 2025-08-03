@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Products\Models\In\" />
+    <Folder Include="Products\Models\" />
+    <Folder Include="Products\Models\Out\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BTM.Account.Application\BTM.Account.Application.csproj" />
+    <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

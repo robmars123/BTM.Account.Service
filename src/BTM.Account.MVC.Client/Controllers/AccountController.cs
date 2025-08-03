@@ -8,32 +8,39 @@ using BTM.Account.MVC.UI.Controllers.Base;
 using BTM.Account.MVC.UI.Models.Requests;
 using BTM.Account.MVC.UI.Models.Results;
 using BTM.Account.Shared.Common;
-using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BTM.ApiClients;
+using BTM.ApiClients.ProductService;
+using BTM.Account.ApiClient.Abstractions;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
   public class AccountController : BaseController
   {
     private readonly IUserService _userService;
+    private readonly IProductApiClient _productApiClient;
 
     public AccountController(IHttpContextAccessor httpContextAccessor,
                                  ITokenService tokenService,
-                                 IUserService userService) : base(tokenService)
+                                 IUserService userService,
+                                 IProductApiClient productApiClient) : base(tokenService)
     {
       _userService = userService;
+      _productApiClient = productApiClient;
     }
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> IndexAsync()
     {
       var accessToken = await GetAccessTokenAsync();
 
       //get user's identity
       var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+      var productClient = await _productApiClient.GetAsync();
 
       if (userId == null)
         return View();
@@ -56,7 +63,7 @@ namespace BTM.Account.MVC.Client.Controllers
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterRequest model)
+    public async Task<IActionResult> RegisterAsync(RegisterRequest model)
     {
       var request = new RegisterUserCommand(model.Email, model.Username, model.Password);
 
@@ -74,7 +81,7 @@ namespace BTM.Account.MVC.Client.Controllers
       return RedirectToAction("Login", "Account");
     }
 
-    public async Task<IActionResult> Login(string returnUrl = "/")
+    public async Task<IActionResult> LoginAsync(string returnUrl = "/")
     {
       await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 

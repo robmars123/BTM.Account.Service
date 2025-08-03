@@ -15,7 +15,7 @@ namespace BTM.Account.Infrastructure.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<HttpResponseMessage> SendPostRequestAsync(string endpoint, object? requestData, string? accessToken = null)
+        public async Task<HttpResponseMessage> SendPostRequestAsync(string context, string endpoint, object? requestData, string? accessToken = null)
         {
             var httpClient = _httpClientFactory.CreateClient(GlobalConstants.ApiConstants.AccountAPI); //TODO: Make generic
 
@@ -27,9 +27,9 @@ namespace BTM.Account.Infrastructure.Services
             return await httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         }
 
-        public async Task<HttpResponseMessage> GetRequestAsync(string endpoint, object requestData, string accessToken)
+        public async Task<HttpResponseMessage> GetRequestAsync(string context, string endpoint, object requestData, string accessToken)
         {
-            var httpClient = _httpClientFactory.CreateClient(GlobalConstants.ApiConstants.AccountAPI);
+            var httpClient = _httpClientFactory.CreateClient(context);
 
             // Add the token to the request headers if provided
             if (!string.IsNullOrEmpty(accessToken))

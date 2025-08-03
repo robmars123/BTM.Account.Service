@@ -10,12 +10,17 @@
 
   <ItemGroup>
     <Compile Remove="Scripts\**" />
+    <Compile Remove="ViewModels\**" />
     <Content Remove="Scripts\**" />
+    <Content Remove="ViewModels\**" />
     <EmbeddedResource Remove="Scripts\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <None Remove="Scripts\**" />
+    <None Remove="ViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BTM.ApiClients" Version="1.0.1" />
     <PackageReference Include="Duende.AccessTokenManagement" Version="3.2.0" />
     <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
     <PackageReference Include="Duende.IdentityModel" Version="7.0.0" />
@@ -32,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BTM.Account.Api.ServiceDefaults\BTM.Account.Api.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\BTM.Account.ApiClient\BTM.Account.ApiClient.csproj" />
     <ProjectReference Include="..\BTM.Account.Application\BTM.Account.Application.csproj" />
     <ProjectReference Include="..\BTM.Account.Infrastructure\BTM.Account.Infrastructure.csproj" />
     <ProjectReference Include="..\BTM.Account.Shared\BTM.Account.Shared.csproj" />
@@ -39,7 +45,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Queries\" />
-    <Folder Include="ViewModels\" />
+    <Folder Include="ApiClients\" />
   </ItemGroup>
 
   <ItemGroup>

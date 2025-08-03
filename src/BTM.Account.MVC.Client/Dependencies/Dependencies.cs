@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using BTM.Account.ApiClient.Abstractions;
+using BTM.Account.ApiClient.Products.Clients;
 using BTM.Account.Application.Abstractions;
 using BTM.Account.Infrastructure;
 using BTM.Account.Infrastructure.Dependencies;
@@ -18,6 +20,8 @@ namespace BTM.Account.MVC.UI.Dependencies
       services.AddScoped<IHttpRequestService, HttpRequestService>();
       services.AddSingleton<ILoggingService, LoggingService>();
       services.AddSingleton<ICacheService, RedisCacheService>();
+
+      services.AddTransient<IProductApiClient, ProductApiClient>();
 
       AddMvcControllers(services);
       return services;

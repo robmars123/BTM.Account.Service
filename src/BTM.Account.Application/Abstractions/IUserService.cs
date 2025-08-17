@@ -4,8 +4,8 @@ using BTM.Account.Application.Users.RegisterUser;
 
 namespace BTM.Account.Application.Abstractions
 {
-    public interface IUserService
-    {
+    public interface IUserGateway
+  {
         Task<Result<UserDTO>> GetUserAsync(string? userId, string? accessToken);
         Task<Result> RegisterUser(string endpoint, RegisterUserCommand user, string? accessToken);
     }

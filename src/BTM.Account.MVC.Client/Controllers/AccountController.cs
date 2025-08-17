@@ -16,36 +16,45 @@ using Microsoft.AspNetCore.Mvc;
 using BTM.ApiClients;
 using BTM.ApiClients.ProductService;
 using BTM.Account.ApiClient.Abstractions;
+using BTM.Account.Infrastructure.Gateways;
 
 namespace BTM.Account.MVC.Client.Controllers
 {
   public class AccountController : BaseController
   {
-    private readonly IUserService _userService;
+    private readonly IUserGateway _userGateway;
     private readonly IProductApiClient _productApiClient;
 
     public AccountController(IHttpContextAccessor httpContextAccessor,
                                  ITokenService tokenService,
-                                 IUserService userService,
+                                 IUserGateway userGateway,
                                  IProductApiClient productApiClient) : base(tokenService)
     {
-      _userService = userService;
+      _userGateway = userGateway;
       _productApiClient = productApiClient;
     }
     [HttpGet]
     public async Task<IActionResult> IndexAsync()
     {
+      //check if user is authenticated
+      if (!User.Identity.IsAuthenticated)
+        return Challenge();// triggers re-authentication
+
+      //get user id from claims
+      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+      if (userId == null)
+        return View("Error"); // better UX
+
+      //get access token to access API
       var accessToken = await GetAccessTokenAsync();
 
-      //get user's identity
-      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-      var productClient = await _productApiClient.GetAsync();
-
-      if (userId == null)
+      if (string.IsNullOrEmpty(accessToken))
         return View();
 
-      Result<UserDTO> user = await _userService.GetUserAsync(userId, accessToken);
+      //sample call to product API using APIClient facade
+      //var productClient = await _productApiClient.GetAsync();
+
+      Result<UserDTO> user = await _userGateway.GetUserAsync(userId, accessToken);
 
       if (!user.IsSuccess)
         return View();
@@ -67,7 +76,7 @@ namespace BTM.Account.MVC.Client.Controllers
     {
       var request = new RegisterUserCommand(model.Email, model.Username, model.Password);
 
-      var response = await _userService.RegisterUser(GlobalConstants.ApiEndpoints.UsersEndpoint, request, string.Empty);
+      var response = await _userGateway.RegisterUser(GlobalConstants.ApiEndpoints.UsersEndpoint, request, string.Empty);
 
       if (!response.IsSuccess)
       {
@@ -81,6 +90,7 @@ namespace BTM.Account.MVC.Client.Controllers
       return RedirectToAction("Login", "Account");
     }
 
+    [HttpGet]
     public async Task<IActionResult> LoginAsync(string returnUrl = "/")
     {
       await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

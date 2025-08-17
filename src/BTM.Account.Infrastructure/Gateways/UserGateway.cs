@@ -6,9 +6,9 @@ using BTM.Account.Domain.Users;
 using BTM.Account.Shared.Common;
 using Newtonsoft.Json;
 
-namespace BTM.Account.Infrastructure.Services
+namespace BTM.Account.Infrastructure.Gateways
 {
-  public class UserService : IUserService
+  public class UserGateway : IUserGateway
   {
     private readonly IHttpRequestService _httpRequestService;
     private readonly ILoggingService _logger;
@@ -16,7 +16,7 @@ namespace BTM.Account.Infrastructure.Services
     private const string context = GlobalConstants.ApiConstants.AccountAPI;
     private const string endpoint = GlobalConstants.ApiEndpoints.UsersEndpoint;
 
-    public UserService(IHttpRequestService httpRequestService, ILoggingService logger, ICacheService cacheService)
+    public UserGateway(IHttpRequestService httpRequestService, ILoggingService logger, ICacheService cacheService)
     {
       _httpRequestService = httpRequestService;
       _logger = logger;
@@ -37,11 +37,11 @@ namespace BTM.Account.Infrastructure.Services
         });
       }
 
-      UserDTO? result = new UserDTO();
+      var result = new UserDTO();
       try
       {
-        string endpointString = $"{endpoint}/{userId}";
-        HttpResponseMessage response = await _httpRequestService.GetRequestAsync(context, endpointString, null, accessToken ?? string.Empty);
+        var endpointString = $"{endpoint}/{userId}";
+        var response = await _httpRequestService.GetRequestAsync(context, endpointString, null, accessToken ?? string.Empty);
 
         if (!response.IsSuccessStatusCode)
         {

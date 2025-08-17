@@ -4,6 +4,7 @@ using BTM.Account.ApiClient.Products.Clients;
 using BTM.Account.Application.Abstractions;
 using BTM.Account.Infrastructure;
 using BTM.Account.Infrastructure.Dependencies;
+using BTM.Account.Infrastructure.Gateways;
 using BTM.Account.Infrastructure.Models;
 using BTM.Account.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +17,7 @@ namespace BTM.Account.MVC.UI.Dependencies
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
       services.AddScoped<ITokenService, TokenService>();
-      services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUserGateway, UserGateway>();
       services.AddScoped<IHttpRequestService, HttpRequestService>();
       services.AddSingleton<ILoggingService, LoggingService>();
       services.AddSingleton<ICacheService, RedisCacheService>();

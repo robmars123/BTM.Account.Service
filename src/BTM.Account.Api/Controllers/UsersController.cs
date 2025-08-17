@@ -29,26 +29,17 @@ namespace BTM.Account.Api.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> Get(string id)
     {
-      //validate if user is authenticated
-      if (!User.Identity.IsAuthenticated)
-        return Unauthorized(Result.FailureResult(new List<string> { "User is not authenticated." }));
-
-      //validate if user id is valid
       if (!Guid.TryParse(id, out var userId))
         return BadRequest(Result.FailureResult(new List<string> { "Invalid User Id." }));
 
-      var query = new GetUserQuery(Guid.Parse(id.ToString()));
+      var result = await _mediator.Send(new GetUserQuery(userId));
 
-      //todo: refactor without using MediatR
-      var result = await _mediator.Send(query);
+      if (result == null)
+        return StatusCode(500, Result.FailureResult(new List<string> { "Internal server error." }));
 
-      //validate if result is successful
-      if (!result.IsSuccess)
-      {
-        return BadRequest(Result.FailureResult(result.ErrorMessages));
-      }
-
-      return Ok(result.Data);
+      return result.IsSuccess
+          ? Ok(result.Data)
+          : BadRequest(Result.FailureResult(result.ErrorMessages));
     }
 
     // POST api/<UsersController>

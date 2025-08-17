@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
+using BTM.Account.Infrastructure.Gateways;
 
 namespace BTM.Account.Infrastructure.Dependencies
 {
@@ -71,7 +72,7 @@ namespace BTM.Account.Infrastructure.Dependencies
     {
       services.AddScoped<IPasswordService, PasswordService>();
       services.AddScoped<IHttpRequestService, HttpRequestService>();
-      services.AddScoped<IUserService, UserService>();
+      services.AddScoped<IUserGateway, UserGateway>();
       services.AddScoped<ICacheService, RedisCacheService>();
       services.AddScoped<IUserIdentityManager, UserIdentityManager>();
 
